@@ -1,0 +1,9 @@
+run
+-ifn ../../build/scripts/quickdev.prj
+-ofn ../../build/obj/quickdev.ngc
+-ofmt NGC 
+-p xc3s1200e-fg320-4
+-opt_mode Area
+-opt_level 1
+-top quickdev
+-keep_hierarchy yes

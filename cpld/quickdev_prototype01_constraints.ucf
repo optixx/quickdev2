@@ -1,0 +1,24 @@
+CONFIG PART = XC3S1200E-FG320-4 ;
+
+NET clk50 TNM_NET = clk_ref_grp;
+TIMESPEC TS01 = PERIOD : clk_ref_grp : 20.00 : PRIORITY 1;   # 50.00 MHz
+
+TIMESPEC TS11=FROM:PADS:TO:FFS : 30 ns;
+TIMESPEC TS12=FROM:FFS:TO:PADS : 30 ns;
+
+NET red(3)                LOC = "R8" | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST ;
+NET red(2)                LOC = "T8" | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST ;
+NET red(1)                LOC = "R9" | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST ;
+NET green(3)              LOC = "P6" | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST ;
+NET green(2)              LOC = "P8" | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST ;
+NET green(1)              LOC = "N8" | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST ;
+NET blue(3)               LOC = "U4" | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST ;
+NET blue(2)               LOC = "U5" | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST ;
+NET hsync                 LOC = "T4" | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST ;
+NET vsync                 LOC = "U3" | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST ;
+NET button_right          LOC = "E18" | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST ;
+NET button_left           LOC = "D18" | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST ;
+NET button                LOC = "B18" | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST ;
+NET led                   LOC = "J14" | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST ;
+NET clk50                 LOC = "B8"  | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST ;
+
