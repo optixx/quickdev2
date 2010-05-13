@@ -1,21 +1,21 @@
 /*
              LUFA Library
-     Copyright (C) Dean Camera, 2010.
+     Copyright (C) Dean Camera, 2009.
               
   dean [at] fourwalledcubicle [dot] com
       www.fourwalledcubicle.com
 */
 
 /*
-  Copyright 2010  Dean Camera (dean [at] fourwalledcubicle [dot] com)
+  Copyright 2009  Dean Camera (dean [at] fourwalledcubicle [dot] com)
 
-  Permission to use, copy, modify, distribute, and sell this 
-  software and its documentation for any purpose is hereby granted
-  without fee, provided that the above copyright notice appear in 
-  all copies and that both that the copyright notice and this
-  permission notice and warranty disclaimer appear in supporting 
-  documentation, and that the name of the author not be used in 
-  advertising or publicity pertaining to distribution of the 
+  Permission to use, copy, modify, and distribute this software
+  and its documentation for any purpose and without fee is hereby
+  granted, provided that the above copyright notice appear in all
+  copies and that both that the copyright notice and this
+  permission notice and warranty disclaimer appear in supporting
+  documentation, and that the name of the author not be used in
+  advertising or publicity pertaining to distribution of the
   software without specific, written prior permission.
 
   The author disclaim all warranties with regard to this
@@ -34,7 +34,27 @@
  *  the demo and is responsible for the initial application hardware configuration.
  */
 
+
 #include "MassStorage.h"
+#include "uart.h"
+#include <avr/io.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+#define BAUD_RATE 115200
+#define CPU_PRESCALE(n) (CLKPR = 0x80, CLKPR = (n))
+
+#define uart_print(s) uart_print_P(PSTR(s))
+void uart_print_P(const char *str)
+{
+	char c;
+	while (1) {
+		c = pgm_read_byte(str++);
+		if (!c) break;
+		uart_putchar(c);
+	}
+}
 
 /** LUFA Mass Storage Class driver interface configuration and state information. This structure is
  *  passed to all Mass Storage Class driver functions, so that multiple instances of the same class
@@ -86,7 +106,10 @@ void SetupHardware(void)
 
 	/* Hardware Initialization */
 	LEDs_Init();
-	SPI_Init(SPI_SPEED_FCPU_DIV_2 | SPI_SCK_LEAD_FALLING | SPI_SAMPLE_TRAILING | SPI_MODE_MASTER);
+	CPU_PRESCALE(0);  // run at 16 MHz
+	uart_init(BAUD_RATE);
+	uart_print("UART Example\r\n");
+    SPI_Init(SPI_SPEED_FCPU_DIV_2 | SPI_SCK_LEAD_FALLING | SPI_SAMPLE_TRAILING | SPI_MODE_MASTER);
 	Dataflash_Init();
 	USB_Init();
 
