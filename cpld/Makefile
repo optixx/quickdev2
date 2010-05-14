@@ -2,10 +2,10 @@ OBJDIR = build/obj
 PROJECTROOT = $(shell pwd)
 
 TARGET = quickdev
-TARGETFPGA = xc95144xl-TQ144-5
+TARGETCPLD = xc95144xl-5-TQ144
+TARGETCPLD2 = xc95144xl-TQ144-5
 
 BOARD = prototype01
-FLASHTOOL= quickprog
 
 CONSTRAINTS = $(TARGET)_$(BOARD)_constraints.ucf
 XSTSCRIPT = build/scripts/$(TARGET).scr
@@ -18,43 +18,58 @@ XILINXROOT = /opt/Xilinx/11.1/ISE/bin/lin
 
 XST = $(XILINXROOT)/xst
 NGDBUILD = $(XILINXROOT)/ngdbuild
-MAP = $(XILINXROOT)/map
-PAR = $(XILINXROOT)/par
-TRCE = $(XILINXROOT)/trce
-BITGEN = $(XILINXROOT)/bitgen
+FIT=$(XILINXROOT)/cpldfit
+XSLT=$(XILINXROOT)/XSLTProcess
+TSIM=$(XILINXROOT)/tsim
+TA=$(XILINXROOT)/taengine
+HPREP=$(XILINXROOT)/hprep6
 
 #--------------------------------------------------------------------
 
 # main rule
-all: $(TARGET).bit
+all: $(TARGET).jed
 
-
-prepare:
-	cat $(PROJECTROOT)/$(XSTSCRIPT).tpl | sed -e "s/TARGETFPGA/$(TARGETFPGA)/" -e  "s/TARGET/$(TARGET)/" > $(PROJECTROOT)/$(XSTSCRIPT) 
-
-synthesize: prepare
+synthesize: 
 	cd $(OBJDIR); $(XST) -ifn $(PROJECTROOT)/$(XSTSCRIPT) -ofn $(TARGET).srp 
-	cd $(OBJDIR); $(NGDBUILD) -nt on -uc $(PROJECTROOT)/$(CONSTRAINTS) $(TARGET).ngc $(TARGET).ngd
 
-map:
-	cd $(OBJDIR); $(MAP) -pr b $(TARGET).ngd -o $(TARGET).ncd $(TARGET).pcf
+translate:
+	cd $(OBJDIR); $(NGDBUILD) -nt timestamp -p $(TARGETCPLD2) -uc $(PROJECTROOT)/$(CONSTRAINTS) $(TARGET).ngc $(TARGET).ngd  
 
-placeandroute:
-	cd $(OBJDIR); $(PAR) -w -ol high $(TARGET).ncd $(TARGET).ncd $(TARGET).pcf
+fit:
+	cd $(OBJDIR); $(FIT) -p $(TARGETCPLD) \
+			-ofmt vhdl \
+			-optimize speed \
+			-htmlrpt \
+			-loc on  \
+			-slew fast \
+			-init low  \
+			-inputs 54 \
+			-pterms 25 \
+			-unused float \
+			-power std  \
+			-terminate keeper $(TARGET).ngd 
 
-trace:
-	cd $(OBJDIR); $(TRCE) -v 10 -o $(TARGET).twr $(TARGET).ncd $(TARGET).pcf
+sim: 
+	cd $(OBJDIR); $(TSIM) $(TARGET) $(TARGET).nga
 
-$(TARGET).bit: synthesize map placeandroute trace
-	cd $(OBJDIR); $(BITGEN) -w $(TARGET).ncd $@ -f $ $(PROJECTROOT)/$(UTFILE)
+time:
+	cd $(OBJDIR); $(TA)  -f $(TARGET)  --format html1 -l timing_report.htm 
+
+xslt:
+	cd $(OBJDIR); $(XSLT) $(TARGET)_build.xml
+
+generate:
+	cd $(OBJDIR); $(HPREP) -s IEEE1149 -n $(TARGET) -i $(TARGET)
+
+$(TARGET).jed: synthesize translate fit xslt sim time generate
 	mv $(OBJDIR)/$@ $(PROJECTROOT)
 
 upload: 
 	$(FLASHTOOL) -v $(TARGET).bit  
+
 clean:
 	rm -rf $(OBJDIR)/*
-	rm -rf $(TARGET).bit
-	rm -rf $(TARGET).svf
 	rm -rf _impact*
+	rm -rf $(TARGET).jed
 .PHONY: all clean
 

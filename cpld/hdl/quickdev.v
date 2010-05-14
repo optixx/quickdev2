@@ -1,5 +1,5 @@
 
-module top (
+module quickdev (
 
     inout [7:0] sram_dat,
     output [20:0] sram_addr,
