@@ -2,7 +2,7 @@ OBJDIR = build/obj
 PROJECTROOT = $(shell pwd)
 
 TARGET = quickdev
-TARGETFPGA = xc3s1200e-fg320-4
+TARGETFPGA = xc95144xl-TQ144-5
 
 BOARD = prototype01
 FLASHTOOL= quickprog

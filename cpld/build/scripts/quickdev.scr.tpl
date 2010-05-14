@@ -5,5 +5,5 @@ run
 -p TARGETFPGA
 -opt_mode Area
 -opt_level 1
--top quickdev
+-top top
 -keep_hierarchy yes
