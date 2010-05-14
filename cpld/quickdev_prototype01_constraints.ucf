@@ -8,27 +8,27 @@ NET "sram_we_n"    LOC = P16   | IOSTANDARD = LVTTL | SLEW = FAST;
 NET "sram_ce_n"    LOC = P130  | IOSTANDARD = LVTTL | SLEW = FAST;
 
 # CPLD<->SRAM 21 bit address bus
-NET "sram_adr<20>" LOC = P124  | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "sram_adr<19>" LOC = P17   | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "sram_adr<18>" LOC = P15   | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "sram_adr<17>" LOC = P14   | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "sram_adr<16>" LOC = P142  | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "sram_adr<15>" LOC = P26   | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "sram_adr<14>" LOC = P25   | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "sram_adr<13>" LOC = P24   | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "sram_adr<12>" LOC = P23   | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "sram_adr<11>" LOC = P22   | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "sram_adr<10>" LOC = P21   | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "sram_adr<9>"  LOC = P20   | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "sram_adr<8>"  LOC = P19   | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "sram_adr<7>"  LOC = P13   | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "sram_adr<6>"  LOC = P12   | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "sram_adr<5>"  LOC = P11   | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "sram_adr<4>"  LOC = P10   | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "sram_adr<3>"  LOC = P9    | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "sram_adr<2>"  LOC = P7    | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "sram_adr<1>"  LOC = P4    | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "sram_adr<0>"  LOC = P135  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "sram_addr<20>" LOC = P124  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "sram_addr<19>" LOC = P17   | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "sram_addr<18>" LOC = P15   | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "sram_addr<17>" LOC = P14   | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "sram_addr<16>" LOC = P142  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "sram_addr<15>" LOC = P26   | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "sram_addr<14>" LOC = P25   | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "sram_addr<13>" LOC = P24   | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "sram_addr<12>" LOC = P23   | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "sram_addr<11>" LOC = P22   | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "sram_addr<10>" LOC = P21   | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "sram_addr<9>"  LOC = P20   | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "sram_addr<8>"  LOC = P19   | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "sram_addr<7>"  LOC = P13   | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "sram_addr<6>"  LOC = P12   | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "sram_addr<5>"  LOC = P11   | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "sram_addr<4>"  LOC = P10   | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "sram_addr<3>"  LOC = P9    | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "sram_addr<2>"  LOC = P7    | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "sram_addr<1>"  LOC = P4    | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "sram_addr<0>"  LOC = P135  | IOSTANDARD = LVTTL | SLEW = FAST;
 
 # CPLD<->SRAM 8 bit data bus
 NET "sram_dat<7>"   LOC = P140 | IOSTANDARD = LVTTL | SLEW = FAST;
