@@ -1,9 +1,13 @@
+####################
+# SRAM Constraints #
+####################
 
-
-
+# CPLD<->SRAM control lines
 NET "sram_oe_n"    LOC = P136  | IOSTANDARD = LVTTL | SLEW = FAST;
 NET "sram_we_n"    LOC = P16   | IOSTANDARD = LVTTL | SLEW = FAST;
 NET "sram_ce_n"    LOC = P130  | IOSTANDARD = LVTTL | SLEW = FAST;
+
+# CPLD<->SRAM 21 bit address bus
 NET "sram_adr<20>" LOC = P124  | IOSTANDARD = LVTTL | SLEW = FAST;
 NET "sram_adr<19>" LOC = P17   | IOSTANDARD = LVTTL | SLEW = FAST;
 NET "sram_adr<18>" LOC = P15   | IOSTANDARD = LVTTL | SLEW = FAST;
@@ -25,6 +29,8 @@ NET "sram_adr<3>"  LOC = P9    | IOSTANDARD = LVTTL | SLEW = FAST;
 NET "sram_adr<2>"  LOC = P7    | IOSTANDARD = LVTTL | SLEW = FAST;
 NET "sram_adr<1>"  LOC = P4    | IOSTANDARD = LVTTL | SLEW = FAST;
 NET "sram_adr<0>"  LOC = P135  | IOSTANDARD = LVTTL | SLEW = FAST;
+
+# CPLD<->SRAM 8 bit data bus
 NET "sram_dat<7>"   LOC = P140 | IOSTANDARD = LVTTL | SLEW = FAST;
 NET "sram_dat<6>"   LOC = P125 | IOSTANDARD = LVTTL | SLEW = FAST;
 NET "sram_dat<5>"   LOC = P139 | IOSTANDARD = LVTTL | SLEW = FAST;
@@ -33,3 +39,35 @@ NET "sram_dat<3>"   LOC = P138 | IOSTANDARD = LVTTL | SLEW = FAST;
 NET "sram_dat<2>"   LOC = P128 | IOSTANDARD = LVTTL | SLEW = FAST;
 NET "sram_dat<1>"   LOC = P137 | IOSTANDARD = LVTTL | SLEW = FAST;
 NET "sram_dat<0>"   LOC = P129 | IOSTANDARD = LVTTL | SLEW = FAST;
+
+
+###################
+# AVR Constraints #
+###################
+
+# Global CPLD control lines: global clock GCK1 and global tristate GTS1
+# NET "avr_GCK>"    LOC = P30  | IOSTANDARD = LVTTL | SLEW = FAST;
+# NET "avr_GTS>"    LOC = P5  | IOSTANDARD = LVTTL | SLEW = FAST;
+
+# AVR PortA, CPLD<->AVR 8 bit data bus
+NET "avr_d<7>"    LOC = P121  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "avr_d<6>"    LOC = P120  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "avr_d<5>"    LOC = P119  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "avr_d<4>"    LOC = P118  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "avr_d<3>"    LOC = P117  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "avr_d<2>"    LOC = P116  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "avr_d<1>"    LOC = P115  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "avr_d<0>"    LOC = P113  | IOSTANDARD = LVTTL | SLEW = FAST;
+
+# AVR PortB, CPLD<->AVR control lines
+NET "avr_ctrl<7>"    LOC = P82  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "avr_ctrl<6>"    LOC = P83  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "avr_ctrl<5>"    LOC = P85  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "avr_ctrl<4>"    LOC = P86  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "avr_ctrl<3>"    LOC = P87  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "avr_ctrl<2>"    LOC = P88  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "avr_ctrl<1>"    LOC = P91  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "avr_ctrl<0>"    LOC = P92  | IOSTANDARD = LVTTL | SLEW = FAST;
+
+
+
