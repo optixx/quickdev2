@@ -1,10 +1,10 @@
 run
--ifn ../scripts/quickdev.prj
+-ifn ../scripts/system.prj
 -ifmt mixed
--ofn quickdev
+-ofn system
 -ofmt NGC
 -p xc9500xl
--top quickdev
+-top system
 -opt_mode Speed
 -opt_level 1
 -iuc NO

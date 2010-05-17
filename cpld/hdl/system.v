@@ -1,4 +1,4 @@
-module quickdev (
+module system (
 
     inout [7:0] sram_data,
     output [20:0] sram_addr,

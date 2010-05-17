@@ -1,15 +1,13 @@
 OBJDIR = build/obj
+SCRIPTDIR = build/scripts
 PROJECTROOT = $(shell pwd)
 
-TARGET = quickdev
+TARGET = system
 TARGETCPLD = xc95144xl-5-TQ144
-TARGETCPLD2 = xc95144xl-TQ144-5
-
 BOARD = prototype01
 
-CONSTRAINTS = $(TARGET)_$(BOARD)_constraints.ucf
-XSTSCRIPT = build/scripts/$(TARGET).scr
-UTFILE = build/scripts/$(TARGET).ut
+CONSTRAINTS = $(BOARD)_constraints.ucf
+XSTSCRIPT = build/scripts/system.xst
 
 #--------------------------------------------------------------------
 
@@ -23,21 +21,57 @@ XSLT=$(XILINXROOT)/XSLTProcess
 TSIM=$(XILINXROOT)/tsim
 TA=$(XILINXROOT)/taengine
 HPREP=$(XILINXROOT)/hprep6
+CVER=cver
+GTKWAVE=gtkwave
+IVERILOG=iverilog
+VVP=vvp
 
 #--------------------------------------------------------------------
 
-# main rule
-all: $(TARGET).jed
+SIM_SRC=                                  \
+	system_tb.v                           \
+	sreg.v                           	  \
+	bus.v
 
-synthesize: 
+SRC=                                      \
+	system.v 							  \
+	sreg.v                           	  \
+	bus.v
+
+all: $(TARGET).jed
+sim: $(TARGET)_tb.vcd
+view: $(TARGET)_tb.view
+# main rule
+
+#--------------------------------------------------------------------
+
+system_tb.vvp:
+	rm -f $@.list
+	@for i in `echo $^`; do \
+	    echo $$i >> $@.list; \
+	done
+	$(IVERILOG) -o $@ $(VINCDIR) -c $@.list -s $(@:.vvp=)
+
+%.vcd: %.vvp
+	$(VVP) $<
+
+#--------------------------------------------------------------------
+
+$(TARGET).prj: 
+	rm -f $(SCRIPTDIR)/$(TARGET).prj
+	@for i in `echo $(SRC)`; do \
+	    echo "verilog work ../../hdl/$$i" >> $(SCRIPTDIR)/$(TARGET).prj; \
+	done
+
+synthesize: $(TARGET).prj 
 	cd $(OBJDIR); $(XST) -ifn $(PROJECTROOT)/$(XSTSCRIPT) -ofn $(TARGET).srp 
 
 translate:
-	cd $(OBJDIR); $(NGDBUILD) -nt timestamp -p $(TARGETCPLD2) -uc $(PROJECTROOT)/$(CONSTRAINTS) $(TARGET).ngc $(TARGET).ngd  
+	cd $(OBJDIR); $(NGDBUILD) -nt timestamp -p $(TARGETCPLD) -uc $(PROJECTROOT)/$(CONSTRAINTS) $(TARGET).ngc $(TARGET).ngd  
 
 fit:
 	cd $(OBJDIR); $(FIT) -p $(TARGETCPLD) \
-			-ofmt vhdl \
+			-ofmt verilog \
 			-optimize speed \
 			-htmlrpt \
 			-loc on  \
@@ -49,19 +83,15 @@ fit:
 			-power std  \
 			-terminate keeper $(TARGET).ngd 
 
-sim: 
+stats: 
 	cd $(OBJDIR); $(TSIM) $(TARGET) $(TARGET).nga
-
-time:
-	cd $(OBJDIR); $(TA)  -f $(TARGET)  --format html1 -l timing_report.htm 
-
-xslt:
 	cd $(OBJDIR); $(XSLT) $(TARGET)_build.xml
+	cd $(OBJDIR); $(TA)  -f $(TARGET)  --format html1 -l timing_report.htm 
 
 generate:
 	cd $(OBJDIR); $(HPREP) -s IEEE1149 -n $(TARGET) -i $(TARGET)
 
-$(TARGET).jed: synthesize translate fit xslt sim time generate
+$(TARGET).jed: synthesize translate fit stats generate
 	mv $(OBJDIR)/$@ $(PROJECTROOT)
 
 upload: 
