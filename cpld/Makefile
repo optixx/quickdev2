@@ -30,6 +30,7 @@ VVP=vvp
 
 SIM_SRC=                                  \
 	system_tb.v                           \
+	system.v 							  \
 	sreg.v                           	  \
 	bus.v
 
@@ -47,10 +48,10 @@ view: $(TARGET)_tb.view
 
 system_tb.vvp:
 	rm -f $@.list
-	@for i in `echo $^`; do \
-	    echo $$i >> $@.list; \
+	@for i in `echo $(SIM_SRC)`; do \
+	    echo "hdl/$$i" >> $@.list; \
 	done
-	$(IVERILOG) -o $@ $(VINCDIR) -c $@.list -s $(@:.vvp=)
+	$(IVERILOG) -o $@  -c $@.list -s $(@:.vvp=)
 
 %.vcd: %.vvp
 	$(VVP) $<
