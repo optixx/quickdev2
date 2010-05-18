@@ -65,13 +65,44 @@ $(TARGET)_tb.view:  $(OBJDIR)/$(TARGET)_tb.vcd
 
 #--------------------------------------------------------------------
 
+$(TARGET).xst:
+	rm -rf  $(SCRIPTDIR)/$(TARGET).xst
+	@echo "run" 							>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-ifn ../scripts/system.prj"  	>> $(SCRIPTDIR)/$(TARGET).xst 
+	@echo "-ifmt mixed" 					>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-ofn $(TARGET)" 					>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-ofmt NGC" 						>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-p xc9500xl" 					>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-top $(TARGET)" 					>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-opt_mode Speed" 				>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-opt_level 1" 					>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-iuc NO" 						>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-keep_hierarchy YES" 			>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-netlist_hierarchy as_optimized" >> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-rtlview Yes" 					>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-hierarchy_separator /" 			>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-bus_delimiter <>" 				>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-case maintain" 					>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-verilog2001 YES" 				>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-fsm_extract YES" 				>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-fsm_encoding Auto" 				>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-safe_implementation No" 		>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-mux_extract YES" 				>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-resource_sharing YES" 			>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-iobuf YES" 						>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-pld_mp YES" 					>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-pld_xp YES" 					>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-pld_ce YES" 					>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-wysiwyg NO" 					>> $(SCRIPTDIR)/$(TARGET).xst
+	@echo "-equivalent_register_removal YES" >> $(SCRIPTDIR)/$(TARGET).xst
+
 $(TARGET).prj: 
 	rm -f $(SCRIPTDIR)/$(TARGET).prj
 	@for i in `echo $(SRC)`; do \
 	    echo "verilog work ../../hdl/$$i" >> $(SCRIPTDIR)/$(TARGET).prj; \
 	done
 
-synthesize: $(TARGET).prj 
+synthesize: $(TARGET).prj $(TARGET).xst
 	cd $(OBJDIR); $(XST) -ifn $(PROJECTROOT)/$(XSTSCRIPT) -ofn $(TARGET).srp 
 
 translate:
