@@ -13,7 +13,10 @@ XSTSCRIPT = build/scripts/system.xst
 
 #root of your xilinx binaries
 XILINXROOT = /opt/Xilinx/11.1/ISE/bin/lin
+XILINXROOT = /home/david/Data/devel/apps/Xilinx/11.1/ISE/bin/lin
 
+
+#ISE
 XST = $(XILINXROOT)/xst
 NGDBUILD = $(XILINXROOT)/ngdbuild
 FIT=$(XILINXROOT)/cpldfit
@@ -21,10 +24,11 @@ XSLT=$(XILINXROOT)/XSLTProcess
 TSIM=$(XILINXROOT)/tsim
 TA=$(XILINXROOT)/taengine
 HPREP=$(XILINXROOT)/hprep6
-CVER=cver
-GTKWAVE=gtkwave
+
+#Simulation
 IVERILOG=iverilog
 VVP=vvp
+GTKWAVE=gtkwave
 
 #--------------------------------------------------------------------
 
@@ -40,21 +44,24 @@ SRC=                                      \
 	bus.v
 
 all: $(TARGET).jed
-sim: $(TARGET)_tb.vcd
+sim: $(TARGET)_tb.vvp $(TARGET)_tb.vcd
 view: $(TARGET)_tb.view
-# main rule
 
 #--------------------------------------------------------------------
 
-system_tb.vvp:
-	rm -f $@.list
+$(TARGET)_tb.vvp:
+	rm -f $(OBJDIR)/$@.list
 	@for i in `echo $(SIM_SRC)`; do \
-	    echo "hdl/$$i" >> $@.list; \
+	    echo "../../hdl/$$i" >> $(OBJDIR)/$@.list; \
 	done
-	$(IVERILOG) -o $@  -c $@.list -s $(@:.vvp=)
+	 cd $(OBJDIR); $(IVERILOG) -o $@  -c $@.list -s $(@:.vvp=)
 
-%.vcd: %.vvp
-	$(VVP) $<
+%.vcd: $(OBJDIR)/$(TARGET)_tb.vvp
+	cd $(OBJDIR); $(VVP) $(TARGET)_tb.vvp
+
+$(TARGET)_tb.view:  $(OBJDIR)/$(TARGET)_tb.vcd
+	$(GTKWAVE) $<
+
 
 #--------------------------------------------------------------------
 
