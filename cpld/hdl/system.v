@@ -16,10 +16,9 @@ module system (
     input avr_clk
 );
     
-assign sram_data = avr_data;
-assign sram_oe_n = avr_oe;
-assign sram_we_n = avr_we;
-assign sram_ce_n = avr_ce;
+//assign sram_oe_n = avr_oe;
+//assign sram_we_n = avr_we;
+//assign sram_ce_n = avr_ce;
 
 sreg sreg0 (
 	.clk( avr_clk ),
@@ -27,12 +26,13 @@ sreg sreg0 (
 	.out( sram_addr )
 );
 
+/*
 bi_direct_bus sram0(
-    .clk( avr_clk ),
+//    .clk( avr_clk ),
     .sram_dir( avr_oe ),
     .sram_data( sram_data ),
     .avr_data( avr_data )
 );
-
+*/
 endmodule
 
