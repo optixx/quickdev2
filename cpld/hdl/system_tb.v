@@ -15,7 +15,7 @@ module system_tb;
 
 reg          clk;
 wire [7:0]   sram_data;
-reg  [7:0]   sram_data_reg = 0;
+reg  [7:0]   sram_data_reg;
 assign       sram_data = sram_data_reg;
 
 wire [20:0]  sram_addr;
@@ -33,7 +33,7 @@ reg          sram_ce_n_reg;
 assign       sram_ce_n = sram_ce_n_reg;
 
 wire [7:0]   avr_data;
-reg [7:0]    avr_data_reg = 0;
+reg [7:0]    avr_data_reg;
 assign       avr_data = avr_data_reg;
 reg [2:0]    avr_ctrl;
 
@@ -109,6 +109,10 @@ initial begin
     #10
     avr_si = 1;
     #10
+    avr_oe = 1;
+    #10
+    
+    #10
 	$finish;
 end
 
@@ -117,7 +121,7 @@ end
 //------------------------------------------------------------------
 always @(posedge clk)
 begin
-		$display( "avr: oe=%b si=%b clk=%b data=%h sram: addr=%h data=%h sreg=%b %b %b",
+		$display( "avr: oe=%b si=%b clk=%b data=%h sram: addr=%h data=%h sreg=%b bus: rd=%h wd=%h dir=%b",
             dut.avr_oe,
             dut.avr_si,
             dut.avr_clk,
@@ -125,8 +129,10 @@ begin
             dut.sram_addr, 
             dut.sram_data,
             dut.sreg0.buffer,
-            dut.sreg0.in,
-            dut.sreg0.out);
+            dut.sram0.read_data,
+            dut.sram0.write_data,
+            dut.sram0.sram_dir);
+
 
 end
 endmodule

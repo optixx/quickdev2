@@ -26,13 +26,13 @@ sreg sreg0 (
 	.out( sram_addr )
 );
 
-/*
+
 bi_direct_bus sram0(
-//    .clk( avr_clk ),
+    .clk( avr_clk ),
     .sram_dir( avr_oe ),
     .sram_data( sram_data ),
     .avr_data( avr_data )
 );
-*/
+
 endmodule
 

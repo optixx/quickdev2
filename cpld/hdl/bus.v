@@ -18,7 +18,7 @@ assign  sram_data = (sram_dir) ? 8'bz : write_data;
 assign  avr_data =  (!sram_dir) ? 8'bz : read_data;
 
 always @(posedge clk) begin
-    if (sram_dir == 1'b1)
+    if (sram_dir)
        read_data <= sram_data;
    else
        write_data <= avr_data;
