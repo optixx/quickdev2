@@ -3,17 +3,12 @@
 
 module system_tb;
 
-//----------------------------------------------------------------------------
-// Parameter (may differ for physical synthesis)
-//----------------------------------------------------------------------------
-//parameter tck      = 20;                // clock period in ns
-//parameter clk_freq = 1000000000 / tck;   // Frequenzy in HZ
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+parameter tck      = 10;                // clock period in ns
+parameter clk_freq = 1000000000 / tck;   // Frequenzy in HZ
 
 
 reg          clk;
+reg  [15:0]  cycle;
 wire [7:0]   sram_data;
 reg  [7:0]   sram_data_reg;
 assign       sram_data = sram_data_reg;
@@ -45,6 +40,7 @@ reg         avr_si;
 
 initial begin
     clk <= 0;
+    cycle <=0;
 end
 
 system dut (
@@ -65,8 +61,12 @@ system dut (
 );
 
 
-always #5 clk <= ~clk;
-
+always begin
+    #(tck/2) 
+    clk <= ~clk;
+    if (clk)
+        cycle = cycle + 1;
+end
 /* Simulation setup */
 initial begin
 	
@@ -77,51 +77,51 @@ initial begin
     avr_oe = 1;
     avr_si = 1;
     avr_data_reg = 8'hff;
-	#10
+	#tck
     avr_oe = 0;
     avr_si = 1;
-	#10
+	#tck
     avr_si = 0;
-	#10
+	#tck
     avr_si = 0;
-	#10
+	#tck
     avr_si = 1;
-    #10
+    #tck
     avr_si = 1;
-	#10
+	#tck
     avr_si = 0;
-	#10
+	#tck
     avr_si = 0;
-	#10
+	#tck
     avr_si = 1;
-    #10
+    #tck
     avr_si = 1;
-	#10
+	#tck
     avr_si = 0;
-	#10
+	#tck
     avr_si = 0;
-	#10
+	#tck
     avr_si = 1;
-    #10
+    #tck
     avr_si = 1;
-    #10
+    #tck
     avr_si = 1;
-    #10
+    #tck
     avr_si = 1;
-    #10
+    #tck
     avr_oe = 1;
-    #10
+    #tck
     
-    #10
+    #tck
 	$finish;
 end
 
-//------------------------------------------------------------------
-// Monitor Wishbone transactions
-//------------------------------------------------------------------
-always @(posedge clk)
+
+
+always @(clk)
 begin
-		$display( "avr: oe=%b si=%b clk=%b data=%h sram: addr=%h data=%h sreg=%b bus: rd=%h wd=%h dir=%b",
+		$display( "cycle: %d avr: oe=%b si=%b clk=%b data=%h sram: addr=%h data=%h sreg=%b bus: rd=%h wd=%h dir=%b",
+            cycle,
             dut.avr_oe,
             dut.avr_si,
             dut.avr_clk,
