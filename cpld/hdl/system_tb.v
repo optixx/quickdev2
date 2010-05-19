@@ -120,7 +120,7 @@ end
 
 always @(clk)
 begin
-		$display( "cycle: %d avr: oe=%b si=%b clk=%b data=%h sram: addr=%h data=%h sreg=%b bus: rd=%h wd=%h dir=%b",
+		$display( "cycle: %d avr: oe=%b si=%b clk=%b data=%h sram: addr=%h data=%h sreg=%b bus: rd=%h wd=%h avr_data=%h sram_data=%h dir=%b",
             cycle,
             dut.avr_oe,
             dut.avr_si,
@@ -131,6 +131,8 @@ begin
             dut.sreg0.buffer,
             dut.sram0.read_data,
             dut.sram0.write_data,
+            dut.sram0.avr_data,
+            dut.sram0.sram_data,
             dut.sram0.sram_dir);
 
 

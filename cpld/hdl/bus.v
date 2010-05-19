@@ -15,10 +15,10 @@ reg [7:0]   read_data;
 reg [7:0]   write_data;  
 
 assign  sram_data = (sram_dir) ? 8'bz : write_data;
-assign  avr_data =  (!sram_dir) ? 8'bz : read_data;
+assign  avr_data =  (sram_dir) ? 8'bz : read_data;
 
 always @(posedge clk) begin
-    if (sram_dir)
+    if (sram_dir == 1'b1)
        read_data <= sram_data;
    else
        write_data <= avr_data;
