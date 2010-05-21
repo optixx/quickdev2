@@ -24,3 +24,27 @@ always @(posedge clk) begin
        write_data <= avr_data;
 end
 endmodule
+
+
+
+
+module bidir #(
+    parameter DWIDTH = 8
+)(
+    input                   clk,
+    input                   oe,
+    inout   [DWIDTH-1:0]    bidir,
+    input   [DWIDTH-1:0]    inp
+);
+
+reg [7:0]   a;
+
+assign bidir = oe ? 8'bz : a;
+
+
+always @(posedge clk) begin
+    if (oe == 1'b1)
+       a <= inp;
+end
+
+endmodule
