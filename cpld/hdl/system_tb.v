@@ -33,9 +33,9 @@ assign       avr_data = avr_data_reg;
 reg [2:0]    avr_ctrl;
 
 reg          avr_ce;
-reg         avr_we;
-reg         avr_oe;
-reg         avr_si;
+reg          avr_we;
+reg          avr_oe;
+reg          avr_si;
 
 
 initial begin
@@ -73,46 +73,50 @@ initial begin
     $dumpfile("system_tb.vcd");
 	$dumpvars(0, dut);
 
-	// send select value
+    sram_data_reg = 8'bz;
     avr_oe = 1;
     avr_si = 1;
     avr_data_reg = 8'hff;
 	#tck
+    avr_si = 1;
+	#tck
+    avr_si = 0;
+	#tck
+    avr_si = 0;
+	#tck
+    avr_si = 1;
+    #tck
+    avr_si = 1;
+	#tck
+    avr_si = 0;
+	#tck
+    avr_si = 0;
+	#tck
+    avr_si = 1;
+    #tck
+    avr_si = 1;
+	#tck
+    avr_si = 0;
+	#tck
+    avr_si = 0;
+	#tck
+    avr_si = 1;
+    #tck
+    avr_si = 1;
+    #tck
+    avr_si = 1;
+    #tck
+    avr_si = 1;
+    #tck
     avr_oe = 0;
-    avr_si = 1;
-	#tck
-    avr_si = 0;
-	#tck
-    avr_si = 0;
-	#tck
-    avr_si = 1;
     #tck
-    avr_si = 1;
-	#tck
-    avr_si = 0;
-	#tck
-    avr_si = 0;
-	#tck
-    avr_si = 1;
-    #tck
-    avr_si = 1;
-	#tck
-    avr_si = 0;
-	#tck
-    avr_si = 0;
-	#tck
-    avr_si = 1;
-    #tck
-    avr_si = 1;
-    #tck
-    avr_si = 1;
-    #tck
-    avr_si = 1;
     #tck
     avr_oe = 1;
     #tck
-    
     #tck
+    sram_data_reg = 8'haa;
+    #tck
+
 	$finish;
 end
 
@@ -120,7 +124,7 @@ end
 
 always @(clk)
 begin
-		$display( "cycle: %d avr: oe=%b si=%b clk=%b data=%h sram: addr=%h data=%h sreg=%b bus: rd=%h wd=%h avr_data=%h sram_data=%h dir=%b",
+		$display( "cycle: %d avr: oe=%b si=%b clk=%b data=%h sram: addr=%h data=%h sreg=%b  bus: oe=%b bidir=%b inp=%b a=%b",
             cycle,
             dut.avr_oe,
             dut.avr_si,
@@ -129,11 +133,11 @@ begin
             dut.sram_addr, 
             dut.sram_data,
             dut.sreg0.buffer,
-            dut.sram0.read_data,
-            dut.sram0.write_data,
-            dut.sram0.avr_data,
-            dut.sram0.sram_data,
-            dut.sram0.sram_dir);
+            dut.bidir0.oe,
+            dut.bidir0.bidir,
+            dut.bidir0.inp,
+            dut.bidir0.a,
+        );
 
 
 end
