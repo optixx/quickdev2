@@ -36,7 +36,6 @@ reg          avr_ce;
 reg          avr_we;
 reg          avr_oe;
 reg          avr_si;
-reg          avr_reset;
 
 
 initial begin
@@ -58,8 +57,7 @@ system dut (
     .avr_we( avr_we ),
     .avr_oe( avr_oe ),
     .avr_si( avr_si ),
-    .avr_clk( clk ),
-    .avr_reset( avr_reset )
+    .avr_clk( clk )
 );
 
 
@@ -77,7 +75,6 @@ initial begin
 
     sram_data_reg = 8'bz;
     avr_oe = 1;
-    avr_we = 1;
     avr_si = 1;
     avr_data_reg = 8'hff;
 	#tck
@@ -111,10 +108,13 @@ initial begin
     #tck
     avr_si = 1;
     #tck
-    sram_data_reg = 8'haa;
     avr_oe = 0;
     #tck
     #tck
+    avr_oe = 1;
+    #tck
+    #tck
+    sram_data_reg = 8'haa;
     #tck
 
 	$finish;
@@ -124,7 +124,7 @@ end
 
 always @(clk)
 begin
-		$display( "cycle: %d avr: oe=%b si=%b clk=%b data=%h sram: addr=%h data=%h sreg=%b",
+		$display( "cycle: %d avr: oe=%b si=%b clk=%b data=%h sram: addr=%h data=%h sreg=%b  bus: oe=%b bidir=%b inp=%b a=%b",
             cycle,
             dut.avr_oe,
             dut.avr_si,
@@ -133,6 +133,10 @@ begin
             dut.sram_addr, 
             dut.sram_data,
             dut.sreg0.buffer,
+            dut.bidir0.oe,
+            dut.bidir0.bidir,
+            dut.bidir0.inp,
+            dut.bidir0.a,
         );
 
 
