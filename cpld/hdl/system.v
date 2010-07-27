@@ -14,6 +14,7 @@ module system (
     input avr_oe,
     input avr_si,
     input avr_clk,
+    input avr_sreg_clk,
     input avr_reset
 );
     
@@ -22,7 +23,7 @@ module system (
 //assign sram_ce_n = avr_ce;
 
 sreg sreg0 (
-	.clk( avr_clk ),
+	.clk( avr_sreg_clk ),
 	.in( avr_si ),
 	.out( sram_addr )
 );
