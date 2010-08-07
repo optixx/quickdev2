@@ -14,28 +14,23 @@ module system (
     input avr_oe,
     input avr_si,
     input avr_clk,
-    input avr_sreg_clk,
+    input avr_sreg_en,
     input avr_reset
 );
     
-//assign sram_oe_n = avr_oe;
-//assign sram_we_n = avr_we;
-//assign sram_ce_n = avr_ce;
+reg avr_sreg_clk;
+
+always @(*)
+begin
+    if (avr_sreg_en == 1'b0)
+       avr_sreg_clk <= avr_clk;
+end
 
 sreg sreg0 (
 	.clk( avr_sreg_clk ),
 	.in( avr_si ),
 	.out( sram_addr )
 );
-
-/*
-bidir bidir0(
-    .clk( avr_clk),
-    .oe( avr_oe),
-    .bidir( sram_data),
-    .inp ( avr_data)
-);
-*/
 
 
 bus_fsm bus_fsm0(

@@ -10,8 +10,7 @@ parameter sck      = 10;                // sreg clock period in ns
 
 reg          clk;
 reg  [15:0]  cycle;
-reg          clk_sreg;
-reg          clk_sreg_en;
+reg          sreg_en;
 wire [7:0]   sram_data;
 reg  [7:0]   sram_data_reg;
 assign       sram_data = sram_data_reg;
@@ -45,8 +44,6 @@ reg          avr_reset;
 initial begin
     clk <= 0;
     cycle <=0;
-    clk_sreg <= 0;
-    clk_sreg_en <= 1;
 end
 
 system dut (
@@ -64,7 +61,7 @@ system dut (
     .avr_oe( avr_oe ),
     .avr_si( avr_si ),
     .avr_clk( clk ),
-    .avr_sreg_clk( clk_sreg ),
+    .avr_sreg_en( sreg_en ),
     .avr_reset( avr_reset )
 );
 
@@ -76,14 +73,6 @@ always begin
         cycle = cycle + 1;
 end
 
-always begin
-    #(sck/2)
-    if (clk_sreg_en == 1'b1) begin
-        clk_sreg <= ~clk_sreg;
-    end
-end
-
-/* Simulation setup */
 initial begin
 	
     $dumpfile("system_tb.vcd");
@@ -94,8 +83,8 @@ initial begin
     avr_we = 1;
     avr_si = 1;
     avr_data_reg = 8'bz;
-    clk_sreg_en = 1;
-
+    sreg_en = 0;
+    $display("Push address into sreg"); 
     #tck
     avr_si = 1;
 	#tck
@@ -127,7 +116,8 @@ initial begin
     #tck
     avr_si = 1;
     #tck
-    clk_sreg_en = 0;
+    $display("Set data byte $aa on SRAM and oe lo");
+    sreg_en = 1;
     sram_data_reg = 8'haa;
     avr_oe = 0;
     #tck
@@ -135,6 +125,7 @@ initial begin
     #tck
     #tck
     #tck
+    $display("Set data byte $bb on SRAM and toggle oe");
     avr_oe = 1;
     sram_data_reg = 8'hbb;
     #tck
@@ -143,7 +134,8 @@ initial begin
     #tck
     #tck
     #tck
-
+    
+    $display("Set data byte $ee on AVR and toggle we");
     avr_oe = 1;
     avr_we = 0;
     sram_data_reg = 8'hzz;
@@ -160,9 +152,11 @@ end
 
 always @(clk)
 begin
-		$display( "cycle: %d avr: oe=%b si=%b clk=%b data=%h sram: addr=%h data=%h sreg=%b fsm: state=%b bavr=%h (%h) bsram=%h (%h) buf=%h",
+		$display( "cycle: %d avr: oe=%b we=%b sreg_en=%b si=%b clk=%b data=%h sram: addr=%h data=%h sreg=%b fsm: state=%b bavr=%h (%h) bsram=%h (%h) buf=%h",
             cycle,
             dut.avr_oe,
+            dut.avr_we,
+            dut.avr_sreg_en,
             dut.avr_si,
             dut.avr_clk,
             dut.avr_data,
