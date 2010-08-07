@@ -135,7 +135,7 @@ initial begin
     #tck
     #tck
     
-    $display("Set data byte $ee on AVR and toggle we");
+    $display("Set data byte $ee on AVR and switch we/oe");
     avr_oe = 1;
     avr_we = 0;
     sram_data_reg = 8'hzz;
@@ -144,6 +144,18 @@ initial begin
     #tck
     #tck
     #tck
+
+
+    $display("Set data byte $22 on SRAM and switch we/oe");
+    avr_oe = 0;
+    avr_we = 1;
+    sram_data_reg = 8'h22;
+    avr_data_reg = 8'hzz;
+    #tck
+    #tck
+    #tck
+    #tck
+
 
 	$finish;
 end

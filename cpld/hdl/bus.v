@@ -51,46 +51,46 @@ assign sram = buffer_sram;
 
 always @ (state or we or oe)
 begin : FSM_COMBO
- next_state = 3'b000;
- case(state)
-   IDLE : if (we == 1'b0) begin
-                next_state = BUFAVR;
-              end else if (oe == 1'b0) begin
-                next_state= BUFSRAM;
-              end else begin
-                next_state = IDLE;
-              end
-   BUFAVR: if (we == 1'b0) begin
-                next_state = WE;
-              end else begin
-                next_state = IDLE;
-              end
-   BUFSRAM: if (oe == 1'b0) begin
-                next_state = OE;
-              end else begin
-                next_state = IDLE;
-              end
-   OE : if (oe == 1'b0) begin
-                next_state = OE;
-              end else begin
-                next_state = IDLE;
-              end
-   WE : if (we == 1'b0) begin
-                next_state = WE;
-              end else begin
-                next_state = IDLE;
-              end
-   default : next_state = IDLE;
+    next_state = 3'b000;
+    case(state)
+    IDLE : if (we == 1'b0) begin
+            next_state = BUFAVR;
+        end else if (oe == 1'b0) begin
+            next_state= BUFSRAM;
+        end else begin
+            next_state = IDLE;
+        end
+    BUFAVR: if (we == 1'b0) begin
+            next_state = WE;
+        end else begin
+            next_state = IDLE;
+        end
+    BUFSRAM: if (oe == 1'b0) begin
+            next_state = OE;
+        end else begin
+            next_state = IDLE;
+        end
+    OE : if (oe == 1'b0) begin
+            next_state = OE;
+        end else begin
+            next_state = IDLE;
+        end
+    WE : if (we == 1'b0) begin
+            next_state = WE;
+        end else begin
+            next_state = IDLE;
+        end
+    default : next_state = IDLE;
   endcase
 end
 
 //----------Seq Logic-----------------------------
 always @ (posedge clk)
 begin : FSM_SEQ
-  if (reset == 1'b1) begin
-    state <= #1 IDLE;
-  end else begin
-    state <= #1 next_state;
+    if (reset == 1'b1) begin
+        state <= #1 IDLE;
+    end else begin
+        state <= #1 next_state;
   end
 end
 
@@ -98,35 +98,33 @@ end
 always @ (posedge clk)
 begin : OUTPUT_LOGIC
 if (reset == 1'b1) begin
-  buffer_avr <= 8'bz;
-  buffer_sram <= 8'bz;
+    buffer_avr <= 8'bz;
+    buffer_sram <= 8'bz;
 end
 else
 begin
   case(state)
     IDLE: begin
-              buffer_avr <= 8'bz;
-              buffer_sram <= 8'bz;
-           end
+        buffer_avr <= 8'bz;
+        buffer_sram <= 8'bz;
+    end
     WE: begin
-             buffer_sram <= buffer;
-        end
+        buffer_sram <= buffer;
+    end
     OE: begin
-             buffer_avr <= buffer;
-        end
+        buffer_avr <= buffer;
+    end
     BUFSRAM : begin
-              buffer <= sram;
-        end
+        buffer <= sram;
+    end
     BUFAVR : begin
-              buffer <= avr;
-        end
+        buffer <= avr;
+    end
     default : begin
-              buffer_avr <= 8'bz;
-              buffer_sram <= 8'bz;
-       end
+        buffer_avr <= 8'bz;
+        buffer_sram <= 8'bz;
+    end
   endcase
 end
 end
-
-
-endmodule // End of Module arbiter
+endmodule
