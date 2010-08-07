@@ -72,11 +72,15 @@ begin : FSM_COMBO
         end
     OE : if (oe == 1'b0) begin
             next_state = BUFSRAM;
+        //end else if (we == 1'b0) begin
+        //    next_state = BUFAVR;
         end else begin
             next_state = IDLE;
         end
     WE : if (we == 1'b0) begin
             next_state = BUFAVR;
+        //end else if ( oe == 1'b0 ) begin
+        //    next_state = BUFSRAM;
         end else begin
             next_state = IDLE;
         end
@@ -117,9 +121,11 @@ begin
     end
     BUFSRAM : begin
         buffer <= sram;
+        //buffer_sram <= 8'bz;
     end
     BUFAVR : begin
         buffer <= avr;
+        //buffer_avr <= 8'bz;
     end
     default : begin
         buffer_avr <= 8'bz;
