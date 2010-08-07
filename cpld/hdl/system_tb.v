@@ -144,7 +144,6 @@ initial begin
     #tck
     #tck
     #tck
-    #tck
     
     $display("#4 READ byte $22 from SRAM -> AVR");
     avr_oe = 0;
