@@ -116,7 +116,7 @@ initial begin
     #tck
     avr_si = 1;
     #tck
-    $display("Set data byte $aa on SRAM and oe lo");
+    $display("#1 Set data byte $aa on SRAM and oe lo");
     sreg_en = 1;
     #tck
     #tck
@@ -125,16 +125,14 @@ initial begin
     #tck
     #tck
     #tck
-    $display("Set data byte $bb on SRAM and toggle oe");
-    avr_oe = 1;
+    
+    $display("#2 Set data byte $bb on SRAM and toggle oe");
     sram_data_reg = 8'hbb;
     #tck
     #tck
-    avr_oe = 0;
-    #tck
-    #tck
-    
-    $display("Set data byte $ee on AVR and switch we/oe");
+    #tck 
+
+    $display("#3 Set data byte $ee on AVR and switch we/oe");
     avr_oe = 1;
     avr_we = 0;
     #tck
@@ -143,9 +141,9 @@ initial begin
     avr_data_reg = 8'hee;
     #tck
     #tck
+    #tck
 
-
-    $display("Set data byte $22 on SRAM and switch we/oe");
+    $display("#4 Set data byte $22 on SRAM and switch we/oe");
     avr_oe = 0;
     avr_we = 1;
     #tck
@@ -154,7 +152,7 @@ initial begin
     avr_data_reg = 8'hzz;
     #tck
     #tck
-
+    #tck
 	$finish;
 end
 
@@ -162,12 +160,11 @@ end
 
 always @(clk)
 begin
-		$display( "cycle=%d clk=%b avr: oe=%b we=%b | sreg_en=%b data=%h sram: addr=%h data=%h sreg=%b sclk=%b fsm=%b bavr=%h (%h) bsram=%h (%h) buf=%h",
+		$display( "cycle=%d clk=%b avr: oe=%b we=%b data=%h | sram: addr=%h data=%h sreg=%b sclk=%b fsm=%b bavr=%h (%h) bsram=%h (%h) buf=%h",
             cycle,
             dut.avr_clk,
             dut.avr_oe,
             dut.avr_we,
-            dut.avr_sreg_en,
             dut.avr_data,
             dut.sram_addr, 
             dut.sram_data,

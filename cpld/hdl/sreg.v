@@ -13,7 +13,7 @@ module sreg #(
     begin
         buffer = 21'b0;
     end
-    always @(negedge clk && !en)
+    always @(posedge clk && !en)
     begin
         //buffer = {buffer[DWIDTH-2:0], in};
         buffer <= buffer << 1;

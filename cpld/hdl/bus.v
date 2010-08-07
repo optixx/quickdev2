@@ -71,12 +71,12 @@ begin : FSM_COMBO
             next_state = IDLE;
         end
     OE : if (oe == 1'b0) begin
-            next_state = OE;
+            next_state = BUFSRAM;
         end else begin
             next_state = IDLE;
         end
     WE : if (we == 1'b0) begin
-            next_state = WE;
+            next_state = BUFAVR;
         end else begin
             next_state = IDLE;
         end
