@@ -29,4 +29,5 @@
 *.rcc
 *.log
 *.tmp
-
+*.vcd
+*.vvp*
