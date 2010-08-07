@@ -22,18 +22,24 @@ assign sram_oe_n = avr_oe;
 assign sram_we_n = avr_we;
 assign sram_ce_n = avr_ce;
 
-reg avr_sreg_clk;
+//reg avr_sreg_clk;
 
-always @(*)
-begin
-    if (avr_sreg_en == 1'b0)
-       avr_sreg_clk <= avr_clk;
-end
+//initial 
+//begin
+//    avr_sreg_clk = 1'b0;
+//end 
+
+//always @(avr_clk)
+//begin
+//    if (avr_sreg_en == 1'b0)
+//        avr_sreg_clk <= avr_clk;
+//end
 
 sreg sreg0 (
-	.clk( avr_sreg_clk ),
+	.clk( avr_clk ),
 	.in( avr_si ),
-	.out( sram_addr )
+	.out( sram_addr ),
+    .en( avr_sreg_en )
 );
 
 
