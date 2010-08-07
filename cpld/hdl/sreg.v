@@ -13,11 +13,12 @@ module sreg #(
     begin
         buffer = 21'b0;
     end
-    always @(posedge clk && !en)
+    always @(posedge clk)
     begin
-        //buffer = {buffer[DWIDTH-2:0], in};
-        buffer <= buffer << 1;
-        buffer[0] <= in; 
+        if ( en == 1'b0 ) begin
+            buffer <= buffer << 1;
+            buffer[0] <= in;
+        end
     end
     
     assign out = buffer;
