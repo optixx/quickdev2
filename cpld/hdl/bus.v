@@ -107,6 +107,7 @@ begin
     IDLE: begin
         buffer_avr <= 8'bz;
         buffer_sram <= 8'bz;
+        buffer <= 8'bz;
     end
     WE: begin
         buffer_sram <= buffer;

@@ -1,0 +1,21 @@
+
+cd build/obj; /opt/Xilinx/11.1/ISE/bin/lin/xst -ifn /home/david/Devel/arch/avr/code/quickdev2/cpld/build/scripts/system.xst -ofn system.srp 
+
+cd build/obj; /opt/Xilinx/11.1/ISE/bin/lin/ngdbuild -nt timestamp -p xc95144xl-5-TQ144 -uc /home/david/Devel/arch/avr/code/quickdev2/cpld/prototype01_constraints.ucf system.ngc system.ngd  
+
+cd build/obj; /opt/Xilinx/11.1/ISE/bin/lin/cpldfit -p xc95144xl-5-TQ144 \
+			-ofmt verilog \
+			-optimize speed \
+			-htmlrpt \
+			-loc on  \
+			-slew fast \
+			-init low  \
+			-inputs 54 \
+			-pterms 25 \
+			-unused float \
+			-power std  \
+			-terminate keeper system.ngd 
+cd build/obj; /opt/Xilinx/11.1/ISE/bin/lin/tsim system system.nga
+cd build/obj; /opt/Xilinx/11.1/ISE/bin/lin/XSLTProcess system_build.xml
+cd build/obj; /opt/Xilinx/11.1/ISE/bin/lin/hprep6 -s IEEE1149 -n system -i system
+mv build/obj/system.jed /home/david/Devel/arch/avr/code/quickdev2/cpld

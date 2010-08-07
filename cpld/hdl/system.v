@@ -17,7 +17,11 @@ module system (
     input avr_sreg_en,
     input avr_reset
 );
-    
+   
+assign sram_oe_n = avr_oe;
+assign sram_we_n = avr_we;
+assign sram_ce_n = avr_ce;
+
 reg avr_sreg_clk;
 
 always @(*)
