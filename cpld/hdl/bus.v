@@ -41,7 +41,13 @@ parameter OE      = 5'b10000;
 
 reg   [SIZE-1:0]          state;
 reg   [SIZE-1:0]          next_state;
-reg   [DWIDTH-1:0]       buffer;
+reg   [DWIDTH-1:0]        buffer_avr;
+reg   [DWIDTH-1:0]        buffer_sram;
+reg   [DWIDTH-1:0]        buffer;
+
+assign avr = buffer_avr;
+assign sram = buffer_sram;
+
 
 always @ (state or we or oe)
 begin : FSM_COMBO
@@ -92,30 +98,31 @@ end
 always @ (posedge clk)
 begin : OUTPUT_LOGIC
 if (reset == 1'b1) begin
-  avr <= 8'bz;
-  sram <= 8'bz;
+  buffer_avr <= 8'bz;
+  buffer_sram <= 8'bz;
 end
-else begin
+else
+begin
   case(state)
     IDLE: begin
-              avr <= 8'bz;
-              sram <= 8'bz;
+              buffer_avr <= 8'bz;
+              buffer_sram <= 8'bz;
            end
     WE: begin
-             sram <= avr;
+             buffer_sram <= buffer;
         end
     OE: begin
-             avr <= sram;
-        end
-    BUFAVR : begin
-            buffer <= avr;
+             buffer_avr <= buffer;
         end
     BUFSRAM : begin
-            avr <= sram;
+              buffer <= sram;
+        end
+    BUFAVR : begin
+              buffer <= avr;
         end
     default : begin
-              avr <= 8'bz;
-              sram <= 8'bz;
+              buffer_avr <= 8'bz;
+              buffer_sram <= 8'bz;
        end
   endcase
 end

@@ -76,7 +76,7 @@ initial begin
     sram_data_reg = 8'bz;
     avr_oe = 1;
     avr_si = 1;
-    avr_data_reg = 8'hff;
+
 	#tck
     avr_si = 1;
 	#tck
@@ -111,6 +111,7 @@ initial begin
     avr_oe = 0;
     #tck
     #tck
+    avr_data_reg = 8'hzz;
     avr_oe = 1;
     #tck
     #tck
