@@ -87,7 +87,6 @@ initial begin
     avr_data_reg = 8'bz;
     sreg_en = 0;
     $display("Push address into sreg"); 
-    #tck
     avr_si = 1;
 	#tck
     avr_si = 0;
