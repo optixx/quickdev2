@@ -161,7 +161,7 @@ end
 
 always @(cycle)
 begin
-		$display( "cycle=%d clk=%b avr: oe=%b we=%b data=%h | sram: addr=%h data=%h sreg=%b sclk=%b fsm=%b bavr=%h (%h) bsram=%h (%h) buf=%h | debug=%b",
+		$display( "cycle=%d clk=%b avr: oe=%b we=%b data=%h | sram: addr=%h data=%h sreg=%b sclk=%b debug=%b fsm=%b bavr=%h (%h) bsram=%h (%h) buf=%h",
             cycle,
             dut.avr_clk,
             dut.avr_oe,
@@ -171,13 +171,13 @@ begin
             dut.sram_data,
             dut.sreg0.buffer,
             dut.sreg0.clk,
+            dut.sreg0.debug,
             dut.bus_fsm0.state,
             dut.bus_fsm0.buffer_avr,
             dut.bus_fsm0.avr,
             dut.bus_fsm0.buffer_sram,
             dut.bus_fsm0.sram,
-            dut.bus_fsm0.buffer,
-            dut.bus_fsm0.debug
+            dut.bus_fsm0.buffer
         );
 
 end

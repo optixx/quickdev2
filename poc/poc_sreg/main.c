@@ -114,10 +114,22 @@ int main(void)
     }
 
 
-
-
-
-	uart_putstring("start\n\r");
+	AVR   &=  ~(1 << AVR_SREG_EN);
+    AVR   |=  (1 << AVR_SI);
+    clk_toogle();
+    clk_toogle();
+    AVR   &=  ~(1 << AVR_SI);
+    clk_toogle();
+    clk_toogle();
+    AVR   |=  (1 << AVR_SI);
+    clk_toogle();
+    clk_toogle();
+    AVR   &=  ~(1 << AVR_SI);
+    clk_toogle();
+    clk_toogle();
+    halt();
+	
+    uart_putstring("start\n\r");
 	AVR   |=  (1 << AVR_SREG_EN);
     SRAM_write(0x00000000,0xaa);
 	byte = SRAM_read(0x00000000);

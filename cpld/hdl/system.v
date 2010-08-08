@@ -31,7 +31,8 @@ sreg sreg0 (
 	.clk( avr_clk ),
 	.in( avr_si ),
 	.out( sram_addr ),
-    .en( avr_sreg_en )
+    .en( avr_sreg_en ),
+    .debug( debug[3:0] )
 );
 
 
@@ -41,8 +42,7 @@ bus_fsm bus_fsm0(
     .we( avr_we ),
     .oe( avr_oe ),
     .avr( avr_data ),
-    .sram( sram_data ),
-    .debug ( debug[3:0] )
+    .sram( sram_data )
 );
 
 endmodule

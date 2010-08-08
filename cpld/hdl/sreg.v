@@ -5,24 +5,21 @@ module sreg #(
     input                   clk,
     input                   in,
     output  [DWIDTH-1:0]    out,
-    input                   en
+    input                   en,
+    output [3:0]            debug
 );
     reg [DWIDTH-1:0] buffer;
-    
+   
+    assign debug = {buffer[3:0]};
     initial
     begin
         buffer = 21'b0;
     end
     always @(posedge clk)
     begin
-        //if ( en == 1'b0 ) begin
-        //    buffer <= buffer << 1;
-        //    buffer[0] <= in;
-        //end
         if ( en == 1'b0 ) begin
-            buffer = 21'b0;
-        end else begin
-            buffer = 21'h100;
+            buffer <= buffer << 1;
+            buffer[0] <= in;
         end
     end
     
