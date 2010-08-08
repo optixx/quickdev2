@@ -7,9 +7,16 @@
 #define AVR_DATA_DIR    DDRA
 #define AVR_DATA_PIN    PINA
 
+
+
+#define CLOCK           PORTC
+#define CLOCK_DIR       DDRC
+#define CLOCK_PIN       PINC
+#define CLOCK_CLK       PC7
+
 #define AVR             PORTB 
 #define AVR_DIR         DDRB
-#define AVR_COUNTER          PB6
+#define AVR_COUNTER     PB6
 #define AVR_WE          PB5 
 #define AVR_OE          PB4
 #define AVR_SI          PB3
@@ -21,7 +28,7 @@
 #define nop()               __asm volatile ("nop")
 #define wait()              _delay_us(1)
 #define halt()              uart_putstring("halt"); while(1)
-#define clk_toogle()        (AVR ^= (1<< AVR_CLK)) 
+#define clk_toogle()        (CLOCK ^= (1<< CLOCK_CLK)) 
 
 
 #define BAUD_RATE 115200
@@ -273,6 +280,8 @@ void init(void)
     // output ports
     AVR_DIR=0xff;    
 	AVR_DATA_DIR = 0xff;
+    // 
+    CLOCK_DIR = 0xff;
     // reset sreg
     AVR   |=  (1 << AVR_RESET);
     wait();
@@ -288,7 +297,7 @@ int main(void)
     uart_init(BAUD_RATE);
     init();
     write_loop();
-    write_burst_big_block();
+    //write_burst_big_block();
     halt();
 	
     return 0;
