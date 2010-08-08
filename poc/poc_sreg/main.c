@@ -111,8 +111,6 @@ inline void SRAM_burst_end()
 {
 	AVR   |=  (1 << AVR_OE);
 	AVR   |=  (1 << AVR_WE);
-    nop();
-    nop();
 }
 
 void read_back(void)
@@ -211,15 +209,15 @@ void write_burst_big_block(void)
     uint32_t i;
     uart_putstring("write_big_loop\n\r");
     SRAM_burst_start(0x000000);
-    for (i=0; i < 0x100; i++){
-        if (i%0x100==0) 
+    for (i=0; i < 0x100000; i++){
+        if (i%0x1000==0) 
 	        uart_putchar('.');
         SRAM_burst_write(0xff - i);
         SRAM_burst_inc();
     }
     SRAM_burst_end();
     uart_putstring("done\n\r");
-    for (i=0; i < 0x100; i++){
+    for (i=0; i < 0x10000; i++){
         byte = SRAM_read(i);
 	    itoa(byte,buf,16);
 	    uart_putstring(buf);

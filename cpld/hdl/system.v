@@ -6,9 +6,14 @@ module system (
     output sram_we_n,
     output sram_ce_n,
 
+
+    output [7:0] snes_data,
+    input [20:0] snes_addr,
+
     inout [7:0] avr_data,
     input [2:0] avr_ctrl,
-
+    
+    input avr_snes_mode,
     input avr_counter,
     input avr_we,
     input avr_oe,
@@ -19,13 +24,21 @@ module system (
     output [7:0] debug
 );
 
-assign sram_oe_n = avr_oe;
-assign sram_we_n = avr_we;
-assign sram_ce_n = (avr_oe && avr_we) ? 1'b1 : 1'b0 ;
 
+
+reg [20:0] avr_sram_addr_reg;
+wire [20:0] avr_sram_addr;
+assign avr_sram_addr = avr_sram_addr_reg;
 wire sreg_clk;
 wire fsm_clk;
 wire [7:0]  debug_dummy;
+
+assign sram_oe_n = avr_oe;
+assign sram_we_n = avr_we;
+assign sram_ce_n = (avr_oe && avr_we) ? 1'b1 : 1'b0 ;
+//assign sram_addr = avr_sram_addr;
+
+
 
 divide_by_N dcm0 ( 
     .reset ( avr_reset ), 

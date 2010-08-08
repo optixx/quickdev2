@@ -17,6 +17,14 @@ assign       sram_data = sram_data_reg;
 
 wire [20:0]  sram_addr;
 
+wire [20:0]  snes_addr;
+reg  [20:0]  snes_addr_reg;
+assign       snes_addr = snes_addr_reg;
+
+wire [7:0]   snes_data;
+reg  [7:0]   snes_data_reg;
+assign       snes_data = snes_data_reg;
+
 wire         sram_oe_n;
 reg          sram_oe_n_reg;
 assign       sram_oe_n = sram_oe_n_reg;
@@ -39,7 +47,7 @@ reg          avr_we;
 reg          avr_oe;
 reg          avr_si;
 reg          avr_reset;
-
+reg          avr_snes_mode;
 
 initial begin
     clk <= 0;
@@ -54,6 +62,8 @@ system dut (
     .sram_we_n( sram_we_n ),
     .sram_ce_n( sram_ce_n ),
 
+    .snes_data ( snes_data ),
+    .snes_addr ( snes_addr ),
     .avr_data( avr_data ),
     .avr_ctrl( avr_ctrl ),
 
@@ -78,11 +88,13 @@ initial begin
 	
     $dumpfile("system_tb.vcd");
 	$dumpvars(0, dut);
-
     
     avr_reset = 1;
     #tck
+    avr_snes_mode = 0;
     avr_reset = 0;
+    snes_data_reg = 8'bz;
+    snes_addr_reg = 21'bz;
     sram_data_reg = 8'bz;
     sram_ce_n_reg = 8'bz;
     avr_oe = 1;
@@ -96,76 +108,46 @@ initial begin
     avr_si = 1;
     #tck
     #tck
-    #tck
-    #tck
-    
     avr_si = 0;
-    #tck
-    #tck
     #tck
     #tck
     avr_si = 0;
     #tck
     #tck
-    #tck
-    #tck
     avr_si = 1;
     #tck
     #tck
-    #tck
-    #tck
     avr_si = 1;
-    #tck
-    #tck
     #tck
     #tck
     avr_si = 0;
     #tck
     #tck
+    avr_si = 0;
+    #tck
+    #tck
+    avr_si = 1;
+    #tck
+    #tck
+    avr_si = 1;
     #tck
     #tck
     avr_si = 0;
     #tck
     #tck
-    #tck
-    #tck
-    avr_si = 1;
-    #tck
-    #tck
-    #tck
-    #tck
-    avr_si = 1;
-    #tck
-    #tck
-    #tck
-    #tck
     avr_si = 0;
     #tck
     #tck
-    #tck
-    #tck
-    avr_si = 0;
-    #tck
-    #tck
+    avr_si = 1;
     #tck
     #tck
     avr_si = 1;
     #tck
     #tck
-    #tck
-    #tck
     avr_si = 1;
     #tck
     #tck
-    #tck
-    #tck
     avr_si = 1;
-    #tck
-    #tck
-    #tck
-    #tck
-    avr_si = 1;
-    #tck
     #tck
     #tck
     #tck
@@ -177,11 +159,13 @@ initial begin
     #tck
     #tck
     #tck
+    #tck
     
     $display("#2 READ byte $bb from SRAM -> AVR");
     sram_data_reg = 8'hbb;
     #tck
     #tck
+    #tck 
     #tck 
     #tck 
     
@@ -195,6 +179,8 @@ initial begin
     #tck
     #tck
     #tck
+    #tck
+    #tck
     
     $display("#4 READ byte $22 from SRAM -> AVR");
     avr_oe = 0;
@@ -203,6 +189,8 @@ initial begin
     #tck
     sram_data_reg = 8'h22;
     avr_data_reg = 8'hzz;
+    #tck
+    #tck
     #tck
     #tck
 	
