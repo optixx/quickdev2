@@ -28,7 +28,7 @@
 #define nop()               __asm volatile ("nop")
 #define wait()              _delay_us(1)
 #define halt()              uart_putstring("halt"); while(1)
-#define clk_toogle()        (CLOCK ^= (1<< CLOCK_CLK)) 
+#define clk_toggle()        (CLOCK ^= (1<< CLOCK_CLK)) 
 
 
 #define BAUD_RATE 115200
@@ -38,8 +38,8 @@ void sreg_set(uint32_t addr);
 
 inline static void tick()
 {
-    clk_toogle();
-    clk_toogle();
+    clk_toggle();
+    clk_toggle();
 }
 
 
@@ -288,13 +288,30 @@ void init(void)
     wait();
     // disable counter
 }
+void toggle_sreg_pattern(void){
+    while(1){
+	    uart_putstring("sreg: 0x5555\n\r");
+        sreg_set(0x5555);
+        uart_getchar();
+	    uart_putstring("sreg: 0xaaaa\n\r");
+        sreg_set(0xaaaa);   
+        uart_getchar();
+	    uart_putstring("sreg: 0x0000\n\r");
+        sreg_set(0x0000);   
+        uart_getchar();
+	    uart_putstring("sreg: 0x000f\n\r");
+        sreg_set(0x000f);   
+        uart_getchar();
+    }
+}
+
 
 int main(void)
 {
 	uint8_t i,byte,buf[2];
     uart_init(BAUD_RATE);
     init();
-    sreg_set(0x0055);   
+    toggle_sreg_pattern();
     write_loop(); 
     halt();
 	
