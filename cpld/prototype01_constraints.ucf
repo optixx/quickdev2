@@ -2,6 +2,16 @@
 # SRAM Constraints #
 ####################
 
+# CPLD Debug lines
+NET "debug<7>"    LOC = P96   | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "debug<6>"    LOC = P94   | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "debug<5>"    LOC = P93   | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "debug<4>"    LOC = P98   | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "debug<3>"    LOC = P104  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "debug<2>"    LOC = P107  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "debug<1>"    LOC = P102  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "debug<0>"    LOC = P105  | IOSTANDARD = LVTTL | SLEW = FAST;
+
 # CPLD<->SRAM control lines
 NET "sram_oe_n"    LOC = P136  | IOSTANDARD = LVTTL | SLEW = FAST;
 NET "sram_we_n"    LOC = P16   | IOSTANDARD = LVTTL | SLEW = FAST;
