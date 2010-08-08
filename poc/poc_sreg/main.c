@@ -293,6 +293,7 @@ int main(void)
     uart_init(BAUD_RATE);
     init();
     write_loop();
+    sreg_set(0x01);   
     //write_burst_big_block();
     halt();
 	

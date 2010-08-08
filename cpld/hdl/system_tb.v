@@ -44,6 +44,7 @@ reg          avr_reset;
 initial begin
     clk <= 0;
     cycle <=0;
+    avr_reset <=0;
 end
 
 system dut (
@@ -78,6 +79,10 @@ initial begin
     $dumpfile("system_tb.vcd");
 	$dumpvars(0, dut);
 
+    
+    avr_reset = 1;
+    #tck
+    avr_reset = 0;
     sram_data_reg = 8'bz;
     sram_ce_n_reg = 8'bz;
     avr_oe = 1;
@@ -89,65 +94,82 @@ initial begin
     
     $display("Push address into sreg"); 
     avr_si = 1;
-    sreg_en = ~sreg_en;
     #tck
-    sreg_en = ~sreg_en;
+    #tck
+    #tck
+    #tck
+    
     avr_si = 0;
-    sreg_en = ~sreg_en;
     #tck
-    sreg_en = ~sreg_en;
+    #tck
+    #tck
+    #tck
     avr_si = 0;
-    sreg_en = ~sreg_en;
     #tck
-    sreg_en = ~sreg_en;
+    #tck
+    #tck
+    #tck
     avr_si = 1;
-    sreg_en = ~sreg_en;
     #tck
-    sreg_en = ~sreg_en;
+    #tck
+    #tck
+    #tck
     avr_si = 1;
-    sreg_en = ~sreg_en;
     #tck
-    sreg_en = ~sreg_en;
+    #tck
+    #tck
+    #tck
     avr_si = 0;
-    sreg_en = ~sreg_en;
     #tck
-    sreg_en = ~sreg_en;
+    #tck
+    #tck
+    #tck
     avr_si = 0;
-    sreg_en = ~sreg_en;
     #tck
-    sreg_en = ~sreg_en;
+    #tck
+    #tck
+    #tck
     avr_si = 1;
-    sreg_en = ~sreg_en;
     #tck
-    sreg_en = ~sreg_en;
+    #tck
+    #tck
+    #tck
     avr_si = 1;
-    sreg_en = ~sreg_en;
     #tck
-    sreg_en = ~sreg_en;
+    #tck
+    #tck
+    #tck
     avr_si = 0;
-    sreg_en = ~sreg_en;
     #tck
-    sreg_en = ~sreg_en;
+    #tck
+    #tck
+    #tck
     avr_si = 0;
-    sreg_en = ~sreg_en;
     #tck
-    sreg_en = ~sreg_en;
+    #tck
+    #tck
+    #tck
     avr_si = 1;
-    sreg_en = ~sreg_en;
     #tck
-    sreg_en = ~sreg_en;
+    #tck
+    #tck
+    #tck
     avr_si = 1;
-    sreg_en = ~sreg_en;
     #tck
-    sreg_en = ~sreg_en;
+    #tck
+    #tck
+    #tck
     avr_si = 1;
-    sreg_en = ~sreg_en;
     #tck
-    sreg_en = ~sreg_en;
+    #tck
+    #tck
+    #tck
     avr_si = 1;
-    sreg_en = ~sreg_en;
     #tck
     #tck
+    #tck
+    #tck
+    sreg_en = 1;
     $display("#1 READ byte $aa from SRAM -> AVR");
     sram_data_reg = 8'haa;
     avr_oe = 0;

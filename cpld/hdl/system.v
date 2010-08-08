@@ -23,8 +23,18 @@ assign sram_oe_n = avr_oe;
 assign sram_we_n = avr_we;
 assign sram_ce_n = (avr_oe && avr_we) ? 1'b1 : 1'b0 ;
 
+wire sreg_clk;
+
+divide_by_N dcm0 ( 
+    .reset ( avr_reset ), 
+    .clk ( avr_clk ), 
+    .enable ( 1 ), 
+    .n( 4 ),
+    .clk_out ( sreg_clk ) 
+);
+
 sreg sreg0 (
-	.clk( avr_clk ),
+	.clk( sreg_clk ),
 	.in( avr_si ),
 	.out( sram_addr ),
     .en_n( avr_sreg_en ),
