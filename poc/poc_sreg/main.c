@@ -52,7 +52,6 @@ uint8_t SRAM_read(uint32_t addr)
     clk_toogle();
     clk_toogle();
     clk_toogle();
-    clk_toogle();
  
 	AVR |= (1<< AVR_OE);
     return data;
@@ -72,7 +71,6 @@ void SRAM_write(uint32_t addr, uint8_t data)
     clk_toogle();
     clk_toogle();
     clk_toogle();
-    
     clk_toogle();
     
     AVR_DATA = data;
@@ -81,10 +79,8 @@ void SRAM_write(uint32_t addr, uint8_t data)
     clk_toogle();
     clk_toogle();
     clk_toogle();
-    clk_toogle();
-    clk_toogle();
- 
-	AVR |= (1<< AVR_WE);
+	
+    AVR |= (1<< AVR_WE);
 }
 
 
@@ -106,35 +102,6 @@ int main(void)
     AVR   &= ~(1 << AVR_RESET);
    
 
-	uart_putstring("Set data 0x55\n\r");
-    AVR   &= ~(1<<AVR_CE);
-	AVR   |=  (1 << AVR_OE);
-	AVR   |=  (1 << AVR_WE);
-    
-	uart_putstring("Toggle clock\n\r");
-    clk_toogle();
-    clk_toogle();
-
-	uart_putstring("WE low\n\r");
-	AVR &= ~(1<<AVR_WE);
-    
-	uart_putstring("Toggle clock\n\r");
-    clk_toogle();
-    clk_toogle();
-    clk_toogle();
-    clk_toogle();
-    
-	uart_putstring("Write data to port\n\r");
-    AVR_DATA = 0x55;
-    
-	uart_putstring("Toggle clock\n\r");
-    clk_toogle();
-    clk_toogle();
-    clk_toogle();
-    clk_toogle();
-    clk_toogle();
-    clk_toogle();
-
     while(0){
         _delay_us(1);
 	    AVR   &= ~(1<<AVR_CE);
@@ -147,7 +114,42 @@ int main(void)
     }
 
 
+
+
+
 	uart_putstring("start\n\r");
+	AVR   |=  (1 << AVR_SREG_EN);
+    SRAM_write(0x00000000,0xaa);
+	byte = SRAM_read(0x00000000);
+	itoa(byte,buf,16);
+	uart_putstring(buf);
+	uart_putchar('\r');
+	uart_putchar('\n');
+    AVR   &= ~(1 << AVR_SREG_EN);
+    wait();
+    SRAM_write(0x00000000,0xbb);
+	byte = SRAM_read(0x00000000);
+	itoa(byte,buf,16);
+	uart_putstring(buf);
+	uart_putchar('\r');
+	uart_putchar('\n');
+
+	AVR   |=  (1 << AVR_SREG_EN);
+	wait();
+    byte = SRAM_read(0x00000000);
+	itoa(byte,buf,16);
+	uart_putstring(buf);
+	uart_putchar('\r');
+	uart_putchar('\n');
+    
+    AVR   &= ~(1 << AVR_SREG_EN);
+	wait();
+    byte = SRAM_read(0x00000000);
+	itoa(byte,buf,16);
+	uart_putstring(buf);
+	uart_putchar('\r');
+	uart_putchar('\n');
+
     for (i=0; i<0x10; i++){
 	    itoa(i,buf,16);
 	    uart_putstring(buf);

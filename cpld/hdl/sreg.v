@@ -15,9 +15,14 @@ module sreg #(
     end
     always @(posedge clk)
     begin
+        //if ( en == 1'b0 ) begin
+        //    buffer <= buffer << 1;
+        //    buffer[0] <= in;
+        //end
         if ( en == 1'b0 ) begin
-            buffer <= buffer << 1;
-            buffer[0] <= in;
+            buffer = 21'b0;
+        end else begin
+            buffer = 21'h100;
         end
     end
     

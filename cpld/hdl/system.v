@@ -42,7 +42,7 @@ bus_fsm bus_fsm0(
     .oe( avr_oe ),
     .avr( avr_data ),
     .sram( sram_data ),
-    .debug ( debug[2:0] )
+    .debug ( debug[3:0] )
 );
 
 endmodule

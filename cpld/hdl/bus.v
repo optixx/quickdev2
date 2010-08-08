@@ -29,7 +29,7 @@ module bus_fsm #(
     input                   oe,
     inout   [DWIDTH-1:0]    avr,
     inout   [DWIDTH-1:0]    sram,
-    output  [2:0]           debug
+    output  [3:0]           debug
 );
 
 parameter SIZE   =  3;
@@ -48,7 +48,7 @@ reg   [DWIDTH-1:0]        buffer;
 
 assign avr = buffer_avr;
 assign sram = buffer_sram;
-assign debug = { 5'bz,state } ;
+assign debug = { 4'bz,we,state } ;
 
 always @ (state or we or oe)
 begin : FSM_COMBO
