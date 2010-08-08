@@ -82,13 +82,12 @@ initial begin
     sram_ce_n_reg = 8'bz;
     avr_oe = 1;
     avr_we = 1;
-    avr_si = 1;
+    avr_si = 0;
     avr_counter = 1;
     avr_data_reg = 8'bz;
-    sreg_en = 1;
+    sreg_en = 0;
     
     $display("Push address into sreg"); 
-    #tck
     avr_si = 1;
     sreg_en = ~sreg_en;
     #tck
@@ -148,13 +147,7 @@ initial begin
     avr_si = 1;
     sreg_en = ~sreg_en;
     #tck
-    sreg_en = ~sreg_en;
-    sreg_en = 1;
-    sreg_en = ~sreg_en;
     #tck
-    sreg_en = ~sreg_en;
-    #tck
-    
     $display("#1 READ byte $aa from SRAM -> AVR");
     sram_data_reg = 8'haa;
     avr_oe = 0;
@@ -203,7 +196,7 @@ end
 
 always @(cycle)
 begin
-		$display( "cycle=%d clk=%b avr: oe=%b we=%b data=%h | sram: ce=%b addr=%h data=%h sreg=%b sclk=%b debug=%b fsm=%b bavr=%h (%h) bsram=%h (%h) buf=%h",
+		$display( "cycle=%d clk=%b avr: oe=%b we=%b data=%h | sram: ce=%b addr=%h data=%h en=%b sreg=%b sclk=%b debug=%b fsm=%b bavr=%h (%h) bsram=%h (%h) buf=%h",
             cycle,
             dut.avr_clk,
             dut.avr_oe,
@@ -212,6 +205,7 @@ begin
             dut.sram_ce_n,
             dut.sram_addr, 
             dut.sram_data,
+            dut.sreg0.en_n,
             dut.sreg0.buffer,
             dut.sreg0.clk,
             dut.sreg0.debug,
