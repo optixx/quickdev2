@@ -6,7 +6,8 @@ module bus_fsm #(
     input                   we,
     input                   oe,
     inout   [DWIDTH-1:0]    avr,
-    inout   [DWIDTH-1:0]    sram
+    inout   [DWIDTH-1:0]    sram,
+    inout   [7:0]           debug
 );
 
 parameter SIZE   =  3;
@@ -97,4 +98,6 @@ begin : OUTPUT_LOGIC
     end
   endcase
 end
+
+assign debug = { clk,we,oe,state,2'bz};
 endmodule

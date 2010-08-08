@@ -46,38 +46,46 @@ inline static void tick()
 uint8_t SRAM_read(uint32_t addr)
 {
 	uint8_t data;
-    sreg_set(addr);
     AVR_DATA_DIR = 0x00;
-	AVR   |=  (1 << AVR_OE);
+    sreg_set(addr);
+    AVR   |=  (1 << AVR_OE);
 	AVR   |=  (1 << AVR_WE);
-    //tick();
-	AVR &= ~(1<<AVR_OE);
-    // clear bus buffers
-    //tick();
-    //tick();
+    nop();
+    nop();
+    nop();
+    nop();
+    AVR &= ~(1<<AVR_OE);
+    nop();
+    nop();
+    nop();
+    nop();
+    nop();
     data = AVR_DATA_PIN;
-    //tick();
-    //tick();
- 
 	AVR |= (1<< AVR_OE);
+    nop();
+    nop();
     return data;
 }
 
 void SRAM_write(uint32_t addr, uint8_t data)
 {
+    AVR_DATA_DIR = 0xff;
     sreg_set(addr);
-	AVR_DATA_DIR = 0xff;
-	AVR   |=  (1 << AVR_OE);
+    AVR   |=  (1 << AVR_OE);
 	AVR   |=  (1 << AVR_WE);
-    //tick();
-	AVR &= ~(1<<AVR_WE);
-    // clear bus buffers
-    //tick();
-    //tick();
+    nop();
+    nop();
+    nop();
+    nop();
     AVR_DATA = data;
-    //tick();
-    //tick();
+    AVR   &= ~(1<<AVR_WE);
+    nop();
+    nop();
+    nop();
+    nop();
     AVR |= (1<< AVR_WE);
+    nop();
+    nop();
 }
 
 
@@ -168,7 +176,7 @@ void read_back(void)
 void write_loop(void)
 {
 	
-	uint8_t i,byte,buf[3];
+	uint8_t i,j,byte,buf[3];
     uart_putstring("write_loop\n\r");
     for (i=0; i<0x10; i++){
 	    itoa(i,buf,16);
@@ -180,14 +188,18 @@ void write_loop(void)
 	    uart_putstring(buf);
         uart_putstring("\n\r");
     }
-    uart_putstring("Read\n");
-    for (i=0; i<0x10; i++){
-	    byte = SRAM_read(i);
-	    itoa(byte,buf,16);
-	    uart_putstring(buf);
-	    uart_putchar(' ');
+    uart_putstring("Read\n\r");
+    for (j=0; j<10; j++){
+        for (i=0; i<0x10; i++){
+            nop();
+            byte = SRAM_read(i);
+            itoa(byte,buf,16);
+            uart_putstring(buf);
+            uart_putchar(' ');
+        }
+        uart_putstring("\n\r");
     }
-    uart_putstring("\n\r");
+   
 }
 
 void write_big_block(void)
@@ -271,23 +283,6 @@ void sreg_set(uint32_t addr)
     //uart_putstring("\n\r");
 }
 
-void init(void)
-{
-	uart_putstring("init\n\r");
-    // output ports
-    AVR_DIR=0xff;    
-	AVR_DATA_DIR = 0xff;
-    // 
-    //CLOCK_DIR = 0xff;
-    // reset sreg
-	AVR   |=  (1 << AVR_SREG_EN);
-	AVR   |=  (1 << AVR_COUNTER);
-    AVR   |=  (1 << AVR_RESET);
-    wait();
-    AVR   &= ~(1 << AVR_RESET);
-    wait();
-    // disable counter
-}
 void toggle_sreg_pattern(void){
     while(1){
 	    uart_putstring("sreg: 0x5555\n\r");
@@ -305,16 +300,40 @@ void toggle_sreg_pattern(void){
     }
 }
 
+void init(void)
+{
+    // output ports
+    AVR_DIR=0xff;    
+	AVR_DATA_DIR = 0xff;
+    // 
+    //CLOCK_DIR = 0xff;
+    AVR   |=  (1 << AVR_OE);
+	AVR   |=  (1 << AVR_WE);
+    AVR   |=  (1 << AVR_SREG_EN);
+	AVR   |=  (1 << AVR_COUNTER);
+    
+    // reset sreg
+    AVR   |=  (1 << AVR_RESET);
+    wait();
+    AVR   &= ~(1 << AVR_RESET);
+    wait();
+    // disable counter
+	uart_putstring("init\n\r");
+
+}
+
 
 int main(void)
 {
 	uint8_t i,byte,buf[2];
     uart_init(BAUD_RATE);
     init();
-    toggle_sreg_pattern();
+    //SRAM_write(0x00,0x55);
+    //SRAM_read(0x00);
+	//uart_putstring("write and read\n\r");
     write_loop(); 
+    
     halt();
-	
     return 0;
 }
 

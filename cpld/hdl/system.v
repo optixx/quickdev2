@@ -25,6 +25,7 @@ assign sram_ce_n = (avr_oe && avr_we) ? 1'b1 : 1'b0 ;
 
 wire sreg_clk;
 wire fsm_clk;
+wire [7:0]  debug_dummy;
 
 divide_by_N dcm0 ( 
     .reset ( avr_reset ), 
@@ -50,7 +51,7 @@ sreg sreg0 (
 	.out( sram_addr ),
     .en_n( avr_sreg_en ),
     .counter_n ( avr_counter),
-    .debug( debug )
+    .debug( debug_dummy )
 );
 
 
@@ -60,7 +61,8 @@ bus_fsm bus_fsm0(
     .we( avr_we ),
     .oe( avr_oe ),
     .avr( avr_data ),
-    .sram( sram_data )
+    .sram( sram_data ),
+    .debug( debug)
 );
 
 endmodule
