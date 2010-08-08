@@ -82,8 +82,8 @@ void SRAM_write(uint32_t addr, uint8_t data)
 
 
 inline void SRAM_burst_start(uint8_t addr){
-    sreg_set(addr);
 	AVR_DATA_DIR = 0xff;
+    sreg_set(addr);
 	AVR   |=  (1 << AVR_OE);
 	AVR   |=  (1 << AVR_WE);
     nop();
@@ -98,18 +98,21 @@ inline void SRAM_burst_write(uint8_t data)
     nop();
     nop();
     nop();
+    nop();
 }
 
 inline void SRAM_burst_inc(void)
 {	
     AVR &= ~(1<<AVR_COUNTER);
-	AVR |= (1<<AVR_COUNTER);
+    AVR |= (1<<AVR_COUNTER);
 }
 
 inline void SRAM_burst_end()
 {
 	AVR   |=  (1 << AVR_OE);
 	AVR   |=  (1 << AVR_WE);
+    nop();
+    nop();
 }
 
 void read_back(void)
@@ -208,15 +211,15 @@ void write_burst_big_block(void)
     uint32_t i;
     uart_putstring("write_big_loop\n\r");
     SRAM_burst_start(0x000000);
-    for (i=0; i < 0x100000; i++){
-        if (i%0x10000==0) 
+    for (i=0; i < 0x100; i++){
+        if (i%0x100==0) 
 	        uart_putchar('.');
-        SRAM_burst_write(0xff - (i&0xff));
+        SRAM_burst_write(0xff - i);
         SRAM_burst_inc();
     }
     SRAM_burst_end();
     uart_putstring("done\n\r");
-    for (i=0; i < 0x100000; i++){
+    for (i=0; i < 0x100; i++){
         byte = SRAM_read(i);
 	    itoa(byte,buf,16);
 	    uart_putstring(buf);
@@ -291,7 +294,7 @@ int main(void)
 	uint8_t i,byte,buf[2];
     uart_init(BAUD_RATE);
     init();
-    write_loop(); 
+    write_burst_big_block();
     halt();
     return 0;
 }
