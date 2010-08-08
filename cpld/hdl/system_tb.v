@@ -34,7 +34,7 @@ reg [7:0]    avr_data_reg;
 assign       avr_data = avr_data_reg;
 reg [2:0]    avr_ctrl;
 
-reg          avr_ce;
+reg          avr_counter;
 reg          avr_we;
 reg          avr_oe;
 reg          avr_si;
@@ -56,7 +56,7 @@ system dut (
     .avr_data( avr_data ),
     .avr_ctrl( avr_ctrl ),
 
-    .avr_ce( avr_ce ),
+    .avr_counter( avr_counter ),
     .avr_we( avr_we ),
     .avr_oe( avr_oe ),
     .avr_si( avr_si ),
@@ -79,9 +79,11 @@ initial begin
 	$dumpvars(0, dut);
 
     sram_data_reg = 8'bz;
+    sram_ce_n_reg = 8'bz;
     avr_oe = 1;
     avr_we = 1;
     avr_si = 1;
+    avr_counter = 1;
     avr_data_reg = 8'bz;
     sreg_en = 0;
     $display("Push address into sreg"); 
@@ -154,19 +156,26 @@ initial begin
     avr_data_reg = 8'hzz;
     #tck
     #tck
-	$finish;
+	
+    $display("#5 INC Counter D");
+    avr_counter = 0;
+    #tck
+    avr_counter = 1;
+    #tck
+    $finish;
 end
 
 
 
 always @(cycle)
 begin
-		$display( "cycle=%d clk=%b avr: oe=%b we=%b data=%h | sram: addr=%h data=%h sreg=%b sclk=%b debug=%b fsm=%b bavr=%h (%h) bsram=%h (%h) buf=%h",
+		$display( "cycle=%d clk=%b avr: oe=%b we=%b data=%h | sram: ce=%b addr=%h data=%h sreg=%b sclk=%b debug=%b fsm=%b bavr=%h (%h) bsram=%h (%h) buf=%h",
             cycle,
             dut.avr_clk,
             dut.avr_oe,
             dut.avr_we,
             dut.avr_data,
+            dut.sram_ce_n,
             dut.sram_addr, 
             dut.sram_data,
             dut.sreg0.buffer,

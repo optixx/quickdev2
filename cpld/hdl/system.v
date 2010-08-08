@@ -9,7 +9,7 @@ module system (
     inout [7:0] avr_data,
     input [2:0] avr_ctrl,
 
-    input avr_ce,
+    input avr_counter,
     input avr_we,
     input avr_oe,
     input avr_si,
@@ -19,20 +19,17 @@ module system (
     output [7:0] debug
 );
 
-
 assign sram_oe_n = avr_oe;
 assign sram_we_n = avr_we;
-assign sram_ce_n = avr_ce;
-//assign debug[0]  = avr_clk;
-//assign debug[1]  = avr_oe;
-//assign debug[2]  = avr_we;
+assign sram_ce_n = (avr_oe && avr_we) ? 1'b1 : 1'b0 ;
 
 sreg sreg0 (
 	.clk( avr_clk ),
 	.in( avr_si ),
 	.out( sram_addr ),
-    .en( avr_sreg_en ),
-    .debug( debug[3:0] )
+    .en_n( avr_sreg_en ),
+    .counter_n ( avr_counter),
+    .debug( debug )
 );
 
 

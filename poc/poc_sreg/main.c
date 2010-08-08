@@ -19,39 +19,39 @@
 
 
 #define nop()               __asm volatile ("nop")
-#define wait()              _delay_us(100)
+#define wait()              _delay_us(1)
 #define halt()              uart_putstring("halt"); while(1)
-#define clk_toogle()        (AVR ^= (1<< AVR_CLK));wait() 
+#define clk_toogle()        (AVR ^= (1<< AVR_CLK)) 
 
 
 #define BAUD_RATE 115200
 
 
+void sreg_set(uint32_t addr);
+
+inline static void tick()
+{
+    clk_toogle();
+    clk_toogle();
+}
+
 
 uint8_t SRAM_read(uint32_t addr)
 {
 	uint8_t data;
+    sreg_set(addr);
     AVR_DATA_DIR = 0x00;
 	AVR   &= ~(1<<AVR_CE);
 	AVR   |=  (1 << AVR_OE);
 	AVR   |=  (1 << AVR_WE);
-	
-    clk_toogle();
-    clk_toogle();
-
+    tick();
 	AVR &= ~(1<<AVR_OE);
     // clear bus buffers
-    clk_toogle();
-    clk_toogle();
-    clk_toogle();
-    clk_toogle();
-    
+    tick();
+    tick();
     data = AVR_DATA_PIN;
-    
-    clk_toogle();
-    clk_toogle();
-    clk_toogle();
-    clk_toogle();
+    tick();
+    tick();
  
 	AVR |= (1<< AVR_OE);
     return data;
@@ -59,50 +59,25 @@ uint8_t SRAM_read(uint32_t addr)
 
 void SRAM_write(uint32_t addr, uint8_t data)
 {
+    sreg_set(addr);
 	AVR_DATA_DIR = 0xff;
 	AVR   &= ~(1<<AVR_CE);
 	AVR   |=  (1 << AVR_OE);
 	AVR   |=  (1 << AVR_WE);
-    clk_toogle();
-    clk_toogle();
-
+    tick();
 	AVR &= ~(1<<AVR_WE);
     // clear bus buffers
-    clk_toogle();
-    clk_toogle();
-    clk_toogle();
-    clk_toogle();
-    
+    tick();
+    tick();
     AVR_DATA = data;
-    
-    clk_toogle();
-    clk_toogle();
-    clk_toogle();
-    clk_toogle();
-	
+    tick();
+    tick();
     AVR |= (1<< AVR_WE);
 }
 
+void toggle_ctrl(void){
 
-
-int main(void)
-{
-
-
-	uint8_t i,byte,buf[2];
-	
-    uart_init(BAUD_RATE);
-    AVR_DIR=0xff;    
-	AVR_DATA_DIR = 0xff;
-
-
-	uart_putstring("Send reset\n\r");
-	AVR   |=  (1 << AVR_RESET);
-    wait();
-    AVR   &= ~(1 << AVR_RESET);
-   
-
-    while(0){
+    while(1){
         _delay_us(1);
 	    AVR   &= ~(1<<AVR_CE);
 	    AVR   &= ~(1<<AVR_OE);
@@ -112,24 +87,13 @@ int main(void)
 	    AVR   |= (1<<AVR_OE);
 	    AVR   |= (1<<AVR_WE);
     }
+}
 
+void read_back(void)
+{
 
-	AVR   &=  ~(1 << AVR_SREG_EN);
-    AVR   |=  (1 << AVR_SI);
-    clk_toogle();
-    clk_toogle();
-    AVR   &=  ~(1 << AVR_SI);
-    clk_toogle();
-    clk_toogle();
-    AVR   |=  (1 << AVR_SI);
-    clk_toogle();
-    clk_toogle();
-    AVR   &=  ~(1 << AVR_SI);
-    clk_toogle();
-    clk_toogle();
-    halt();
-	
-    uart_putstring("start\n\r");
+	uint8_t i,byte,buf[2];
+    uart_putstring("read_back\n\r");
 	AVR   |=  (1 << AVR_SREG_EN);
     SRAM_write(0x00000000,0xaa);
 	byte = SRAM_read(0x00000000);
@@ -162,29 +126,110 @@ int main(void)
 	uart_putchar('\r');
 	uart_putchar('\n');
 
+}
+void write_loop(void)
+{
+	
+	uint8_t i,byte,buf[3];
+    uart_putstring("write_loop\n\r");
     for (i=0; i<0x10; i++){
 	    itoa(i,buf,16);
 	    uart_putstring(buf);
-	    uart_putchar(' ');
-	    SRAM_write(0x00000000,i);
-	    byte = SRAM_read(0x00000000);
+	    uart_putchar(':');
+	    SRAM_write(i,i);
+	    byte = SRAM_read(i);
 	    itoa(byte,buf,16);
 	    uart_putstring(buf);
-	    uart_putchar('\r');
-	    uart_putchar('\n');
-        uart_getchar();
+        uart_putstring("\n\r");
     }
+    uart_putstring("Read\n");
     for (i=0; i<0x10; i++){
-	    itoa(i,buf,16);
-	    uart_putstring(buf);
-	    uart_putchar(' ');
-	    byte = SRAM_read(0x00000000);
+	    byte = SRAM_read(i);
 	    itoa(byte,buf,16);
 	    uart_putstring(buf);
-	    uart_putchar('\r');
-	    uart_putchar('\n');
+	    uart_putchar(' ');
     }
-	while(1);
-	return 0;
+    uart_putstring("\n\r");
+}
+
+void write_big_block(void)
+{
+	
+	uint8_t byte,buf[8];
+    uint32_t i;
+    uart_putstring("write_big_loop\n\r");
+    for (i=0; i < 0x1000; i++){
+        if (i%0x100==0) 
+	        uart_putchar('.');
+        SRAM_write(i,i&0xff);
+    }
+    uart_putstring("done\n\r");
+    for (i=0; i < 0x1000; i++){
+        byte = SRAM_read(i);
+	    itoa(byte,buf,16);
+	    uart_putstring(buf);
+	    uart_putchar(' ');
+        if (i && i%32==0) 
+            uart_putstring("\n\r");
+    }
+    uart_putstring("done\n\r");
+}
+void sreg_feed(void)
+{
+    uart_putstring("feed_sreg\n\r");
+	AVR   &=  ~(1 << AVR_SREG_EN);
+    AVR   |=  (1 << AVR_SI);
+    clk_toogle();
+    clk_toogle();
+    AVR   &=  ~(1 << AVR_SI);
+    clk_toogle();
+    clk_toogle();
+    AVR   |=  (1 << AVR_SI);
+    clk_toogle();
+    clk_toogle();
+    AVR   &=  ~(1 << AVR_SI);
+    clk_toogle();
+    clk_toogle();
+}
+
+
+void sreg_set(uint32_t addr)
+{
+    uint8_t i = 21;
+    //uart_putstring("sreg_set\n\r");
+	AVR   &=  ~(1 << AVR_SREG_EN);
+    while(i--) {
+        if ((addr & ( 1L << i))){
+            AVR   |=  (1 << AVR_SI);
+            //uart_putchar('1');
+        } else {
+            AVR   &=  ~(1 << AVR_SI);
+            //uart_putchar('0');
+        }
+        tick();
+    }
+	AVR   |=  (1 << AVR_SREG_EN);
+}
+
+void reset(void)
+{
+	uart_putstring("reset\n\r");
+	AVR   |=  (1 << AVR_RESET);
+    wait();
+    AVR   &= ~(1 << AVR_RESET);
+    wait();
+}
+int main(void)
+{
+	uint8_t i,byte,buf[2];
+    uart_init(BAUD_RATE);
+    AVR_DIR=0xff;    
+	AVR_DATA_DIR = 0xff;
+    reset();
+    write_loop();
+    write_big_block();
+    halt();
+	
+    return 0;
 }
 
