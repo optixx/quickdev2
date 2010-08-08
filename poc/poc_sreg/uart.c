@@ -45,7 +45,9 @@ static volatile uint8_t rx_buffer_tail;
 void uart_init(uint32_t baud)
 {
 	cli();
-	UBRR1 = (F_CPU / 4 / baud - 1) / 2;
+	//UBRR1 = (F_CPU / 4 / baud - 1) / 2;
+    // uart for 300 baud @ 2MHz
+    UBRR1  = 25;
 	UCSR1A = (1<<U2X1);
 	UCSR1B = (1<<RXEN1) | (1<<TXEN1) | (1<<RXCIE1);
 	UCSR1C = (1<<UCSZ11) | (1<<UCSZ10);

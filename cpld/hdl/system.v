@@ -24,14 +24,25 @@ assign sram_we_n = avr_we;
 assign sram_ce_n = (avr_oe && avr_we) ? 1'b1 : 1'b0 ;
 
 wire sreg_clk;
+wire fsm_clk;
 
 divide_by_N dcm0 ( 
     .reset ( avr_reset ), 
     .clk ( avr_clk ), 
     .enable ( 1 ), 
-    .n( 4 ),
+    .n( 2 ),
     .clk_out ( sreg_clk ) 
 );
+
+
+divide_by_N dcm1 ( 
+    .reset ( avr_reset ), 
+    .clk ( avr_clk ), 
+    .enable ( 1 ), 
+    .n( 2 ),
+    .clk_out ( fsm_clk ) 
+);
+
 
 sreg sreg0 (
 	.clk( sreg_clk ),
@@ -44,7 +55,7 @@ sreg sreg0 (
 
 
 bus_fsm bus_fsm0(
-    .clk( avr_clk ),
+    .clk( fsm_clk ),
     .reset( avr_reset ),
     .we( avr_we ),
     .oe( avr_oe ),

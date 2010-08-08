@@ -26,5 +26,5 @@ module sreg #(
     end
     
     assign out = buffer;
-    assign debug = buffer[7:0];
+    assign debug = {clk ,en_n, buffer[5:0] };
 endmodule

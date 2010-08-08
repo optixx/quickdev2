@@ -256,7 +256,7 @@ void sreg_set(uint32_t addr)
 {
     uint8_t i = 21;
     //uart_putstring("sreg_set\n\r");
-	AVR   &=  ~(1 << AVR_SREG_EN);
+	AVR   |=  (1 << AVR_SREG_EN);
     while(i--) {
         if ((addr & ( 1L << i))){
             AVR   |=  (1 << AVR_SI);
@@ -265,9 +265,10 @@ void sreg_set(uint32_t addr)
             AVR   &=  ~(1 << AVR_SI);
             //uart_putchar('0');
         }
-        //tick();
+        AVR   &=  ~(1 << AVR_SREG_EN);
+	    AVR   |=  (1 << AVR_SREG_EN);
     }
-	AVR   |=  (1 << AVR_SREG_EN);
+    //uart_putstring("\n\r");
 }
 
 void init(void)
@@ -279,12 +280,13 @@ void init(void)
     // 
     //CLOCK_DIR = 0xff;
     // reset sreg
+	AVR   |=  (1 << AVR_SREG_EN);
+	AVR   |=  (1 << AVR_COUNTER);
     AVR   |=  (1 << AVR_RESET);
     wait();
     AVR   &= ~(1 << AVR_RESET);
     wait();
     // disable counter
-	AVR   |=  (1 << AVR_COUNTER);
 }
 
 int main(void)
@@ -292,9 +294,8 @@ int main(void)
 	uint8_t i,byte,buf[2];
     uart_init(BAUD_RATE);
     init();
-    write_loop();
-    sreg_set(0x01);   
-    //write_burst_big_block();
+    sreg_set(0x0055);   
+    write_loop(); 
     halt();
 	
     return 0;
