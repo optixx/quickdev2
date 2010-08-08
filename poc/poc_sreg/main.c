@@ -207,21 +207,26 @@ void sreg_set(uint32_t addr)
 	AVR   |=  (1 << AVR_SREG_EN);
 }
 
-void reset(void)
+void init(void)
 {
-	uart_putstring("reset\n\r");
-	AVR   |=  (1 << AVR_RESET);
+	uart_putstring("init\n\r");
+    // output ports
+    AVR_DIR=0xff;    
+	AVR_DATA_DIR = 0xff;
+    // reset sreg
+    AVR   |=  (1 << AVR_RESET);
     wait();
     AVR   &= ~(1 << AVR_RESET);
     wait();
+    // disable counter
+	AVR   |=  (1 << AVR_COUNTER);
 }
+
 int main(void)
 {
 	uint8_t i,byte,buf[2];
     uart_init(BAUD_RATE);
-    AVR_DIR=0xff;    
-	AVR_DATA_DIR = 0xff;
-    reset();
+    init();
     write_loop();
     write_big_block();
     halt();
