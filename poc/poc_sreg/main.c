@@ -52,8 +52,6 @@ uint8_t SRAM_read(uint32_t addr)
 	AVR   |=  (1 << AVR_WE);
     nop();
     nop();
-    nop();
-    nop();
     AVR &= ~(1<<AVR_OE);
     nop();
     nop();
@@ -62,8 +60,6 @@ uint8_t SRAM_read(uint32_t addr)
     nop();
     data = AVR_DATA_PIN;
 	AVR |= (1<< AVR_OE);
-    nop();
-    nop();
     return data;
 }
 
@@ -75,8 +71,6 @@ void SRAM_write(uint32_t addr, uint8_t data)
 	AVR   |=  (1 << AVR_WE);
     nop();
     nop();
-    nop();
-    nop();
     AVR_DATA = data;
     AVR   &= ~(1<<AVR_WE);
     nop();
@@ -84,8 +78,6 @@ void SRAM_write(uint32_t addr, uint8_t data)
     nop();
     nop();
     AVR |= (1<< AVR_WE);
-    nop();
-    nop();
 }
 
 
@@ -94,24 +86,23 @@ inline void SRAM_burst_start(uint8_t addr){
 	AVR_DATA_DIR = 0xff;
 	AVR   |=  (1 << AVR_OE);
 	AVR   |=  (1 << AVR_WE);
-    //tick();
-	//tick();
+    nop();
+    nop();
     AVR &= ~(1<<AVR_WE);
-	//tick();
 }
 
 inline void SRAM_burst_write(uint8_t data)
 {
     AVR_DATA = data;
-    //tick();
-    //tick();
+    nop();
+    nop();
+    nop();
+    nop();
 }
-
 
 inline void SRAM_burst_inc(void)
 {	
     AVR &= ~(1<<AVR_COUNTER);
-    //tick();
 	AVR |= (1<<AVR_COUNTER);
 }
 
@@ -119,20 +110,6 @@ inline void SRAM_burst_end()
 {
 	AVR   |=  (1 << AVR_OE);
 	AVR   |=  (1 << AVR_WE);
-    //tick();
-    //tick();
-}
-
-void toggle_ctrl(void){
-
-    while(1){
-        _delay_us(1);
-	    AVR   &= ~(1<<AVR_OE);
-	    AVR   &= ~(1<<AVR_WE);
-        _delay_us(1);
-	    AVR   |= (1<<AVR_OE);
-	    AVR   |= (1<<AVR_WE);
-    }
 }
 
 void read_back(void)
@@ -249,20 +226,6 @@ void write_burst_big_block(void)
     }
     uart_putstring("done\n\r");
 }
-void sreg_feed(void)
-{
-    uart_putstring("feed_sreg\n\r");
-	AVR   &=  ~(1 << AVR_SREG_EN);
-    AVR   |=  (1 << AVR_SI);
-    //tick();
-    AVR   &=  ~(1 << AVR_SI);
-    //tick();
-    AVR   |=  (1 << AVR_SI);
-    //tick();
-    AVR   &=  ~(1 << AVR_SI);
-    //tick();
-}
-
 
 void sreg_set(uint32_t addr)
 {
@@ -328,11 +291,7 @@ int main(void)
 	uint8_t i,byte,buf[2];
     uart_init(BAUD_RATE);
     init();
-    //SRAM_write(0x00,0x55);
-    //SRAM_read(0x00);
-	//uart_putstring("write and read\n\r");
     write_loop(); 
-    
     halt();
     return 0;
 }

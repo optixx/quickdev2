@@ -46,7 +46,7 @@ void uart_init(uint32_t baud)
 {
 	cli();
 	//UBRR1 = (F_CPU / 4 / baud - 1) / 2;
-    // uart for 300 baud @ 2MHz
+    // uart for 9600 baud @ 2MHz
     UBRR1  = 25;
 	UCSR1A = (1<<U2X1);
 	UCSR1B = (1<<RXEN1) | (1<<TXEN1) | (1<<RXCIE1);
