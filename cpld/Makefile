@@ -24,7 +24,7 @@ XSLT=$(XILINXROOT)/XSLTProcess
 TSIM=$(XILINXROOT)/tsim
 TA=$(XILINXROOT)/taengine
 HPREP=$(XILINXROOT)/hprep6
-
+IMPACT=$(XILINXROOT)/impact
 #Simulation
 IVERILOG=iverilog
 VVP=vvp
@@ -133,12 +133,16 @@ generate:
 $(TARGET).jed: synthesize translate fit stats generate
 	mv $(OBJDIR)/$@ $(PROJECTROOT)
 
-upload: 
-	$(FLASHTOOL) -v $(TARGET).bit  
+upload: $(TARGET).jed 
+	$(IMPACT) -batch prototype01_impact.rc
 
 clean:
 	rm -rf $(OBJDIR)/*
 	rm -rf _impact*
 	rm -rf $(TARGET).jed
+	rm -rf auto_project*.ipf
+	rm -rf auto_project_xdb 
+	rm -rf ._impact 
+
 .PHONY: all clean
 

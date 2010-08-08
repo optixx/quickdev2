@@ -1,0 +1,8 @@
+setMode -bs
+setCable -port auto
+addDevice -p 1 -file /opt/Xilinx/11.1/ISE/xc9500xl/data/xc95144xl.bsd
+assignFile -p 1 -file ./system.jed
+program -p 1
+closeCable
+quit
+
