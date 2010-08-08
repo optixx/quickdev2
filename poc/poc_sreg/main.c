@@ -50,14 +50,14 @@ uint8_t SRAM_read(uint32_t addr)
     AVR_DATA_DIR = 0x00;
 	AVR   |=  (1 << AVR_OE);
 	AVR   |=  (1 << AVR_WE);
-    tick();
+    //tick();
 	AVR &= ~(1<<AVR_OE);
     // clear bus buffers
-    tick();
-    tick();
+    //tick();
+    //tick();
     data = AVR_DATA_PIN;
-    tick();
-    tick();
+    //tick();
+    //tick();
  
 	AVR |= (1<< AVR_OE);
     return data;
@@ -69,14 +69,14 @@ void SRAM_write(uint32_t addr, uint8_t data)
 	AVR_DATA_DIR = 0xff;
 	AVR   |=  (1 << AVR_OE);
 	AVR   |=  (1 << AVR_WE);
-    tick();
+    //tick();
 	AVR &= ~(1<<AVR_WE);
     // clear bus buffers
-    tick();
-    tick();
+    //tick();
+    //tick();
     AVR_DATA = data;
-    tick();
-    tick();
+    //tick();
+    //tick();
     AVR |= (1<< AVR_WE);
 }
 
@@ -86,24 +86,24 @@ inline void SRAM_burst_start(uint8_t addr){
 	AVR_DATA_DIR = 0xff;
 	AVR   |=  (1 << AVR_OE);
 	AVR   |=  (1 << AVR_WE);
-    tick();
-	tick();
+    //tick();
+	//tick();
     AVR &= ~(1<<AVR_WE);
-	tick();
+	//tick();
 }
 
 inline void SRAM_burst_write(uint8_t data)
 {
     AVR_DATA = data;
-    tick();
-    tick();
+    //tick();
+    //tick();
 }
 
 
 inline void SRAM_burst_inc(void)
 {	
     AVR &= ~(1<<AVR_COUNTER);
-    tick();
+    //tick();
 	AVR |= (1<<AVR_COUNTER);
 }
 
@@ -111,8 +111,8 @@ inline void SRAM_burst_end()
 {
 	AVR   |=  (1 << AVR_OE);
 	AVR   |=  (1 << AVR_WE);
-    tick();
-    tick();
+    //tick();
+    //tick();
 }
 
 void toggle_ctrl(void){
@@ -242,17 +242,13 @@ void sreg_feed(void)
     uart_putstring("feed_sreg\n\r");
 	AVR   &=  ~(1 << AVR_SREG_EN);
     AVR   |=  (1 << AVR_SI);
-    clk_toogle();
-    clk_toogle();
+    //tick();
     AVR   &=  ~(1 << AVR_SI);
-    clk_toogle();
-    clk_toogle();
+    //tick();
     AVR   |=  (1 << AVR_SI);
-    clk_toogle();
-    clk_toogle();
+    //tick();
     AVR   &=  ~(1 << AVR_SI);
-    clk_toogle();
-    clk_toogle();
+    //tick();
 }
 
 
@@ -269,7 +265,7 @@ void sreg_set(uint32_t addr)
             AVR   &=  ~(1 << AVR_SI);
             //uart_putchar('0');
         }
-        tick();
+        //tick();
     }
 	AVR   |=  (1 << AVR_SREG_EN);
 }
@@ -281,7 +277,7 @@ void init(void)
     AVR_DIR=0xff;    
 	AVR_DATA_DIR = 0xff;
     // 
-    CLOCK_DIR = 0xff;
+    //CLOCK_DIR = 0xff;
     // reset sreg
     AVR   |=  (1 << AVR_RESET);
     wait();

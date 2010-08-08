@@ -85,40 +85,74 @@ initial begin
     avr_si = 1;
     avr_counter = 1;
     avr_data_reg = 8'bz;
-    sreg_en = 0;
+    sreg_en = 1;
+    
     $display("Push address into sreg"); 
     #tck
     avr_si = 1;
-	#tck
-    avr_si = 0;
-	#tck
-    avr_si = 0;
-	#tck
-    avr_si = 1;
+    sreg_en = ~sreg_en;
     #tck
-    avr_si = 1;
-	#tck
+    sreg_en = ~sreg_en;
     avr_si = 0;
-	#tck
+    sreg_en = ~sreg_en;
+    #tck
+    sreg_en = ~sreg_en;
     avr_si = 0;
-	#tck
-    avr_si = 1;
+    sreg_en = ~sreg_en;
     #tck
+    sreg_en = ~sreg_en;
     avr_si = 1;
-	#tck
+    sreg_en = ~sreg_en;
+    #tck
+    sreg_en = ~sreg_en;
+    avr_si = 1;
+    sreg_en = ~sreg_en;
+    #tck
+    sreg_en = ~sreg_en;
     avr_si = 0;
-	#tck
+    sreg_en = ~sreg_en;
+    #tck
+    sreg_en = ~sreg_en;
     avr_si = 0;
-	#tck
-    avr_si = 1;
+    sreg_en = ~sreg_en;
     #tck
+    sreg_en = ~sreg_en;
     avr_si = 1;
+    sreg_en = ~sreg_en;
     #tck
+    sreg_en = ~sreg_en;
     avr_si = 1;
+    sreg_en = ~sreg_en;
     #tck
+    sreg_en = ~sreg_en;
+    avr_si = 0;
+    sreg_en = ~sreg_en;
+    #tck
+    sreg_en = ~sreg_en;
+    avr_si = 0;
+    sreg_en = ~sreg_en;
+    #tck
+    sreg_en = ~sreg_en;
     avr_si = 1;
+    sreg_en = ~sreg_en;
     #tck
+    sreg_en = ~sreg_en;
+    avr_si = 1;
+    sreg_en = ~sreg_en;
+    #tck
+    sreg_en = ~sreg_en;
+    avr_si = 1;
+    sreg_en = ~sreg_en;
+    #tck
+    sreg_en = ~sreg_en;
+    avr_si = 1;
+    sreg_en = ~sreg_en;
+    #tck
+    sreg_en = ~sreg_en;
     sreg_en = 1;
+    sreg_en = ~sreg_en;
+    #tck
+    sreg_en = ~sreg_en;
     #tck
     
     $display("#1 READ byte $aa from SRAM -> AVR");
