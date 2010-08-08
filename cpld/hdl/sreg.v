@@ -21,7 +21,7 @@ module sreg #(
             buffer <= buffer << 1;
             buffer[0] <= in;
         end else if ( en_n == 1'b1 &&  counter_n == 1'b0) begin
-            buffer = buffer + 1;
+            buffer <= buffer + 1;
         end
     end
     

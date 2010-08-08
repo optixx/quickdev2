@@ -9,7 +9,7 @@
 
 #define AVR             PORTB 
 #define AVR_DIR         DDRB
-#define AVR_CE          PB6
+#define AVR_COUNTER          PB6
 #define AVR_WE          PB5 
 #define AVR_OE          PB4
 #define AVR_SI          PB3
@@ -41,7 +41,6 @@ uint8_t SRAM_read(uint32_t addr)
 	uint8_t data;
     sreg_set(addr);
     AVR_DATA_DIR = 0x00;
-	AVR   &= ~(1<<AVR_CE);
 	AVR   |=  (1 << AVR_OE);
 	AVR   |=  (1 << AVR_WE);
     tick();
@@ -61,7 +60,6 @@ void SRAM_write(uint32_t addr, uint8_t data)
 {
     sreg_set(addr);
 	AVR_DATA_DIR = 0xff;
-	AVR   &= ~(1<<AVR_CE);
 	AVR   |=  (1 << AVR_OE);
 	AVR   |=  (1 << AVR_WE);
     tick();
@@ -79,11 +77,9 @@ void toggle_ctrl(void){
 
     while(1){
         _delay_us(1);
-	    AVR   &= ~(1<<AVR_CE);
 	    AVR   &= ~(1<<AVR_OE);
 	    AVR   &= ~(1<<AVR_WE);
         _delay_us(1);
-	    AVR   |= (1<<AVR_CE);
 	    AVR   |= (1<<AVR_OE);
 	    AVR   |= (1<<AVR_WE);
     }
