@@ -234,25 +234,38 @@ end
 
 always @(cycle)
 begin
-		$display( "cycle=%d clk=%b avr: oe=%b we=%b data=%h | sram: ce=%b addr=%h data=%h en=%b sreg=%b sclk=%b debug=%b fsm=%b bavr=%h (%h) bsram=%h (%h) buf=%h",
+		$display( "cycle=%d clk=%b avr: oe=%b we=%b data=%h debug=%b | sram: ce=%b addr=%h data=%h en=%b sreg=%b sclk=%b fsm=%b bavr=%h (%h) bsram=%h (%h) buf=%h | cmd: ctrl=%b -> %b%b%b%b%b%b%b",
+            
             cycle,
             dut.avr_clk,
             dut.avr_oe_n,
             dut.avr_we_n,
             dut.avr_data,
+            dut.debug,
+            
             dut.sram_ce_n,
             dut.sram_addr, 
             dut.sram_data,
+            
             dut.sreg0.en_n,
             dut.sreg0.buffer,
             dut.sreg0.clk,
-            dut.sreg0.debug,
+            
             dut.bus_fsm0.state,
             dut.bus_fsm0.buffer_avr,
             dut.bus_fsm0.avr,
             dut.bus_fsm0.buffer_sram,
             dut.bus_fsm0.sram,
-            dut.bus_fsm0.buffer
+            dut.bus_fsm0.buffer,
+            dut.cmd0.avr_ctrl,
+        
+            dut.cmd0.avr_snes_mode,
+            dut.cmd0.avr_counter_n,
+            dut.cmd0.avr_we_n,
+            dut.cmd0.avr_oe_n,
+            dut.cmd0.avr_si,
+            dut.cmd0.avr_sreg_en_n,
+            dut.avr_reset
         );
 
 end

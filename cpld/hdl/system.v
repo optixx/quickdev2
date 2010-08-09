@@ -44,6 +44,23 @@ assign sram_oe_n = avr_oe;
 assign sram_we_n = avr_we;
 assign sram_ce_n = (avr_oe_n && avr_we_n) ? 1'b1 : 1'b0 ;
 
+
+// command muxer
+reg [6:0] dw;
+wire [6:0] d;
+assign d = dw;
+command_muxer cmd0 (
+    .avr_ctrl ( 7'b0000001 ),
+    .avr_clk ( avr_clk ),
+    .avr_snes_mode( d[6] ),
+    .avr_counter_n( d[5] ),
+    .avr_we_n( d[4] ),
+    .avr_oe_n( d[3] ),
+    .avr_si( d[2] ),
+    .avr_sreg_en_n( d[1] ),
+    .avr_reset( d[0] )
+);
+
 // divide external clock by 2 for the sreg clk 
 clock_divider dcm0 ( 
     .reset ( avr_reset ), 
