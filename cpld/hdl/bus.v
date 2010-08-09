@@ -1,25 +1,3 @@
-module bidir #(
-    parameter DWIDTH = 8
-)(
-    input                   clk,
-    input                   oe,
-    inout   [DWIDTH-1:0]    bidir,
-    input   [DWIDTH-1:0]    inp
-);
-
-reg [7:0]   a;
-assign bidir = oe ? 8'bz : a;
-always @(posedge clk) begin
-    if (oe == 1'b1)
-       a <= inp;
-end
-endmodule
-
-
-
-// WE   AVR ==> SRAM
-// OE   AVR <== SRAM
-
 module bus_fsm #(
     parameter DWIDTH= 8
 )(
@@ -28,7 +6,8 @@ module bus_fsm #(
     input                   we,
     input                   oe,
     inout   [DWIDTH-1:0]    avr,
-    inout   [DWIDTH-1:0]    sram
+    inout   [DWIDTH-1:0]    sram,
+    inout   [7:0]           debug
 );
 
 parameter SIZE   =  3;
@@ -119,4 +98,6 @@ begin : OUTPUT_LOGIC
     end
   endcase
 end
+
+assign debug = { clk,we,oe,state,2'bz};
 endmodule

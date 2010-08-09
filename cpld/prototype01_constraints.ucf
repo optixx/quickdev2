@@ -77,5 +77,5 @@ NET "avr_oe"         LOC = P86  | IOSTANDARD = LVTTL | SLEW = FAST;
 NET "avr_si"         LOC = P87  | IOSTANDARD = LVTTL | SLEW = FAST;
 NET "avr_sreg_en"    LOC = P88  | IOSTANDARD = LVTTL | SLEW = FAST;
 NET "avr_reset"      LOC = P91  | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "avr_clk"        LOC = P92  | IOSTANDARD = LVTTL | SLEW = FAST;
-
+NET "avr_clk"        LOC = P30  | IOSTANDARD = LVTTL | SLEW = FAST;
+#NET "avr_clk"        LOC = P92  | IOSTANDARD = LVTTL | SLEW = FAST;

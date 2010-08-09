@@ -6,9 +6,14 @@ module system (
     output sram_we_n,
     output sram_ce_n,
 
+
+    output [7:0] snes_data,
+    input [20:0] snes_addr,
+
     inout [7:0] avr_data,
     input [2:0] avr_ctrl,
-
+    
+    input avr_snes_mode,
     input avr_counter,
     input avr_we,
     input avr_oe,
@@ -19,27 +24,58 @@ module system (
     output [7:0] debug
 );
 
+
+
+reg [20:0] avr_sram_addr_reg;
+wire [20:0] avr_sram_addr;
+assign avr_sram_addr = avr_sram_addr_reg;
+
+wire sreg_clk;
+wire fsm_clk;
+wire [7:0]  debug_dummy;
+
 assign sram_oe_n = avr_oe;
 assign sram_we_n = avr_we;
 assign sram_ce_n = (avr_oe && avr_we) ? 1'b1 : 1'b0 ;
 
+//assign  sram_addr = avr_sram_addr;
+
+divide_by_N dcm0 ( 
+    .reset ( avr_reset ), 
+    .clk ( avr_clk ), 
+    .enable ( 1 ), 
+    .n( 2 ),
+    .clk_out ( sreg_clk ) 
+);
+
+
+divide_by_N dcm1 ( 
+    .reset ( avr_reset ), 
+    .clk ( avr_clk ), 
+    .enable ( 1 ), 
+    .n( 2 ),
+    .clk_out ( fsm_clk ) 
+);
+
+
 sreg sreg0 (
-	.clk( avr_clk ),
+	.clk( sreg_clk ),
 	.in( avr_si ),
 	.out( sram_addr ),
     .en_n( avr_sreg_en ),
     .counter_n ( avr_counter),
-    .debug( debug )
+    .debug( debug_dummy )
 );
 
 
 bus_fsm bus_fsm0(
-    .clk( avr_clk ),
+    .clk( fsm_clk ),
     .reset( avr_reset ),
     .we( avr_we ),
     .oe( avr_oe ),
     .avr( avr_data ),
-    .sram( sram_data )
+    .sram( sram_data ),
+    .debug( debug)
 );
 
 endmodule
