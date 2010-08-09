@@ -3,8 +3,8 @@ module bus_fsm #(
 )(
     input                   clk,
     input                   reset,
-    input                   we,
-    input                   oe,
+    input                   we_n,
+    input                   oe_n,
     inout   [DWIDTH-1:0]    avr,
     inout   [DWIDTH-1:0]    sram,
     inout   [7:0]           debug
@@ -27,33 +27,33 @@ reg   [DWIDTH-1:0]        buffer;
 assign avr = buffer_avr;
 assign sram = buffer_sram;
 
-always @ (state or we or oe)
+always @ (state or we_n or oe_n)
 begin : FSM_COMBO
     next_state = 3'b000;
     case(state)
-    IDLE : if (we == 1'b0) begin
+    IDLE : if (we_n == 1'b0) begin
             next_state = BUFAVR;
-        end else if (oe == 1'b0) begin
+        end else if (oe_n == 1'b0) begin
             next_state= BUFSRAM;
         end else begin
             next_state = IDLE;
         end
-    BUFAVR: if (we == 1'b0) begin
+    BUFAVR: if (we_n == 1'b0) begin
             next_state = WE;
         end else begin
             next_state = IDLE;
         end
-    BUFSRAM: if (oe == 1'b0) begin
+    BUFSRAM: if (oe_n == 1'b0) begin
             next_state = OE;
         end else begin
             next_state = IDLE;
         end
-    OE : if (oe == 1'b0) begin
+    OE : if (oe_n == 1'b0) begin
             next_state = BUFSRAM;
         end else begin
             next_state = IDLE;
         end
-    WE : if (we == 1'b0) begin
+    WE : if (we_n == 1'b0) begin
             next_state = BUFAVR;
         end else begin
             next_state = IDLE;
@@ -99,5 +99,5 @@ begin : OUTPUT_LOGIC
   endcase
 end
 
-assign debug = { clk,we,oe,state,2'bz};
+assign debug = { clk,we_n,oe_n,state,2'bz};
 endmodule
