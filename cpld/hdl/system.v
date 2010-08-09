@@ -11,8 +11,7 @@ module system (
     input [20:0] snes_addr,
 
     inout [7:0] avr_data,
-    input [2:0] avr_ctrl,
-    
+    input [6:0] avr_ctrl,
     input avr_snes_mode,
     input avr_counter_n,
     input avr_we_n,
@@ -50,7 +49,7 @@ reg [6:0] dw;
 wire [6:0] d;
 assign d = dw;
 command_muxer cmd0 (
-    .avr_ctrl ( 7'b0000001 ),
+    .avr_ctrl ( avr_ctrl ),
     .avr_clk ( avr_clk ),
     .avr_snes_mode( d[6] ),
     .avr_counter_n( d[5] ),

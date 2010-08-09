@@ -44,7 +44,6 @@ assign       sram_ce_n = sram_ce_n_reg;
 wire [7:0]   avr_data;
 reg [7:0]    avr_data_reg;
 assign       avr_data = avr_data_reg;
-reg [2:0]    avr_ctrl;
 
 // avr ctrl
 reg          avr_counter_n;
@@ -53,12 +52,13 @@ reg          avr_oe_n;
 reg          avr_si;
 reg          avr_reset;
 reg          avr_snes_mode;
-
+reg [6:0]    avr_ctrl;
 // inital values
 initial begin
     clk <=  1'b0;
     cycle <= 1'b0;
     avr_reset <= 1'b0;
+    avr_ctrl <= 7'b0;
 end
 
 // the device under testing
@@ -115,7 +115,6 @@ initial begin
     avr_si = 1'b0;
     // disable counter
     avr_counter_n = 1'b1;
-   
     $display("Push address 0x4ccf into sreg"); 
     avr_si = 1'b1;
     #tck
@@ -219,13 +218,26 @@ initial begin
     #tck
     #tck
 	
-    $display("#5 INC Counter D");
+    $display("#5 INC Counter");
     // toggle counter to incremtn SRAM address
     avr_counter_n = 1'b0;
     #tck
     #tck
     avr_counter_n = 1'b1;
     #tck
+    #tck
+    
+    
+    $display("#5 Test comand muer");
+    avr_ctrl = 7'b0000001; 
+    #tck
+    avr_ctrl = 7'b0000011; 
+    #tck
+    avr_ctrl = 7'b0000101; 
+    #tck
+    avr_ctrl = 7'b0000111; 
+    #tck
+    avr_ctrl = 7'b0001000; 
     #tck
     $finish;
 end

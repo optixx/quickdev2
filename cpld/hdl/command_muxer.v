@@ -44,6 +44,16 @@ assign avr_si =  reg_avr_si;
 assign avr_sreg_en_n = reg_avr_sreg_en_n;
 assign avr_reset = reg_avr_reset;
 
+initial 
+begin
+    reg_avr_snes_mode <= 0;
+    reg_avr_counter_n <= 1;
+    reg_avr_we_n      <= 1;
+    reg_avr_oe_n      <= 1;
+    reg_avr_si        <= 0;
+    reg_avr_sreg_en_n <= 1;
+    reg_avr_reset     <= 0;
+end
 
 always @(avr_ctrl)
 begin : COMMAND_MUXER
