@@ -1,4 +1,4 @@
-module clockdivide( reset, clk, enable, n, clk_out );
+module clock_divider( reset, clk, enable, n, clk_out );
 
 input clk;
 input reset;

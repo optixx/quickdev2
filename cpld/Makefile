@@ -37,13 +37,15 @@ SIM_SRC=                                  \
 	system.v 							  \
 	sreg.v                           	  \
 	bus.v                                 \
-	clockdivide.v                   
+	clock_divider.v                       \
+	command_muxer.v 
 
 SRC=                                      \
 	system.v 							  \
 	sreg.v                           	  \
 	bus.v                                 \
-	clockdivide.v                   
+	clock_divider.v                       \
+	command_muxer.v 
 
 all: $(TARGET).jed
 sim: $(TARGET)_tb.vvp $(TARGET)_tb.vcd

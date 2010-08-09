@@ -1,44 +1,3 @@
-
-module comandmuxer (
-    input [7:0] avr_ctrl,
-    output avr_snes_mode,
-    output avr_counter_n,
-    output avr_we_n,
-    output avr_oe_n,
-    output avr_si,
-    output avr_sreg_en_n,
-    output avr_reset
-}
-parameter IDLE              =  7'b0000001;
-parameter AVR_RESET_LO      =  7'b0000010;
-parameter AVR_RESET_HI      =  7'b0000011;
-parameter AVR_SREG_EN_LO    =  7'b0000101;
-parameter AVR_SREG_EN_HI    =  7'b0000011
-parameter AVR_RESET_LO      =  4;
-parameter AVR_RESET_HI      =  0;
-parameter AVR_SI_LO         =  0;
-parameter AVR_SI_HI         =  0;
-parameter AVR_OE_LO         =  0;
-parameter AVR_OE_HI         =  0;
-parameter AVR_WE_LO         =  0;
-parameter AVR_WE_HI         =  0;
-parameter AVR_COUNTER_LO    =  0;
-parameter AVR_COUNTER_HI    =  0;
-parameter AVR_SNES_MODE_LO  =  0;
-parameter AVR_SNES_MODE_HI  =  0;
-
-
-reg   [SIZE-1:0]          state;
-reg   [SIZE-1:0]          next_state;
-reg   [DWIDTH-1:0]        buffer_avr;
-reg   [DWIDTH-1:0]        buffer_sram;
-reg   [DWIDTH-1:0]        buffer;
-
-
-always
-
-endmodule;
-
 module system (
 
     inout [7:0] sram_data,
@@ -86,7 +45,7 @@ assign sram_we_n = avr_we;
 assign sram_ce_n = (avr_oe_n && avr_we_n) ? 1'b1 : 1'b0 ;
 
 // divide external clock by 2 for the sreg clk 
-clockdivide dcm0 ( 
+clock_divider dcm0 ( 
     .reset ( avr_reset ), 
     .clk ( avr_clk ), 
     .enable ( 1 ), 
@@ -95,7 +54,7 @@ clockdivide dcm0 (
 );
 
 // divide external clock by 2 for the fsm clk 
-clockdivide dcm1 ( 
+clock_divider dcm1 ( 
     .reset ( avr_reset ), 
     .clk ( avr_clk ), 
     .enable ( 1 ), 
