@@ -29,6 +29,7 @@ module system (
 reg [20:0] avr_sram_addr_reg;
 wire [20:0] avr_sram_addr;
 assign avr_sram_addr = avr_sram_addr_reg;
+
 wire sreg_clk;
 wire fsm_clk;
 wire [7:0]  debug_dummy;
@@ -36,9 +37,8 @@ wire [7:0]  debug_dummy;
 assign sram_oe_n = avr_oe;
 assign sram_we_n = avr_we;
 assign sram_ce_n = (avr_oe && avr_we) ? 1'b1 : 1'b0 ;
-//assign sram_addr = avr_sram_addr;
 
-
+//assign  sram_addr = avr_sram_addr;
 
 divide_by_N dcm0 ( 
     .reset ( avr_reset ), 
