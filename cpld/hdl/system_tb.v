@@ -7,6 +7,23 @@ parameter clk_freq = 1000000000 / tck;      // Frequenzy in HZ
 parameter sck      = 10;                    // sreg clock period in ns
 
 
+parameter IDLE              =  7'b0000001;
+parameter AVR_RESET_LO      =  7'b0000010;
+parameter AVR_RESET_HI      =  7'b0000011;
+parameter AVR_SREG_EN_LO    =  7'b0000100;
+parameter AVR_SREG_EN_HI    =  7'b0000101;
+parameter AVR_SI_LO         =  7'b0000110;
+parameter AVR_SI_HI         =  7'b0000111;
+parameter AVR_OE_LO         =  7'b0001000;
+parameter AVR_OE_HI         =  7'b0001001;
+parameter AVR_WE_LO         =  7'b0001010;
+parameter AVR_WE_HI         =  7'b0001100;
+parameter AVR_COUNTER_LO    =  7'b0001101;
+parameter AVR_COUNTER_HI    =  7'b0001110;
+parameter AVR_SNES_MODE_LO  =  7'b0001111;
+parameter AVR_SNES_MODE_HI  =  7'b0010000;
+
+
 reg          clk;
 reg  [15:0]  cycle;
 
@@ -227,17 +244,21 @@ initial begin
     #tck
     #tck
     
-    
+    // test command muxer
     $display("#5 Test comand muer");
-    avr_ctrl = 7'b0000001; 
+    avr_ctrl = AVR_RESET_HI; 
     #tck
-    avr_ctrl = 7'b0000011; 
+    avr_ctrl = AVR_RESET_LO;
     #tck
-    avr_ctrl = 7'b0000101; 
+    avr_ctrl = AVR_SREG_EN_LO;
     #tck
-    avr_ctrl = 7'b0000111; 
+    avr_ctrl = AVR_SI_HI;
     #tck
-    avr_ctrl = 7'b0001000; 
+    avr_ctrl = AVR_SI_LO;
+    #tck
+    avr_ctrl = AVR_SI_HI;
+    #tck
+    avr_ctrl = AVR_SI_HI;
     #tck
     $finish;
 end
@@ -269,15 +290,15 @@ begin
             dut.bus_fsm0.buffer_sram,
             dut.bus_fsm0.sram,
             dut.bus_fsm0.buffer,
+            
             dut.cmd0.avr_ctrl,
-        
             dut.cmd0.avr_snes_mode,
             dut.cmd0.avr_counter_n,
             dut.cmd0.avr_we_n,
             dut.cmd0.avr_oe_n,
             dut.cmd0.avr_si,
             dut.cmd0.avr_sreg_en_n,
-            dut.avr_reset
+            dut.cmd0.avr_reset
         );
 
 end
