@@ -11,26 +11,24 @@ module system (
     input [20:0] snes_addr,
 
     inout [7:0] avr_data,
-    input [6:0] avr_ctrl,
-    input avr_snes_mode,
-    input avr_counter_n,
-    input avr_we_n,
-    input avr_oe_n,
-    input avr_si,
+    input [7:0] avr_ctrl,
     input avr_clk,
-    input avr_sreg_en_n,
-    input avr_reset,
     output [7:0] debug
 );
 
+// ctrl wires
+wire avr_si;
+wire avr_sreg_en_n;
+wire avr_counter_n;
+wire avr_reset;
+wire avr_we_n;
+wire avr_oe_n;
+wire avr_snes_mode;
 
-
-
-
+// sram address
 reg [20:0] avr_sram_addr_reg;
 wire [20:0] avr_sram_addr;
 assign avr_sram_addr = avr_sram_addr_reg;
-
 // internal clocks
 wire sreg_clk;
 wire fsm_clk;
@@ -39,6 +37,7 @@ wire fsm_clk;
 // currently not debug modules 
 wire [7:0]  debug_dummy;
 
+// forward ctrl to sram
 assign sram_oe_n = avr_oe;
 assign sram_we_n = avr_we;
 assign sram_ce_n = (avr_oe_n && avr_we_n) ? 1'b1 : 1'b0 ;
@@ -51,13 +50,13 @@ assign d = dw;
 command_muxer cmd0 (
     .avr_ctrl ( avr_ctrl ),
     .avr_clk ( avr_clk ),
-    .avr_snes_mode( d[6] ),
-    .avr_counter_n( d[5] ),
-    .avr_we_n( d[4] ),
-    .avr_oe_n( d[3] ),
-    .avr_si( d[2] ),
-    .avr_sreg_en_n( d[1] ),
-    .avr_reset( d[0] )
+    .avr_snes_mode( avr_snes_mode ),
+    .avr_counter_n( avr_counter_n ),
+    .avr_we_n( avr_we_n ),
+    .avr_oe_n( avr_oe_n ),
+    .avr_si( avr_si ),
+    .avr_sreg_en_n( avr_sreg_en_n ),
+    .avr_reset( avr_reset )
 );
 
 // divide external clock by 2 for the sreg clk 

@@ -63,18 +63,11 @@ reg [7:0]    avr_data_reg;
 assign       avr_data = avr_data_reg;
 
 // avr ctrl
-reg          avr_counter_n;
-reg          avr_we_n;
-reg          avr_oe_n;
-reg          avr_si;
-reg          avr_reset;
-reg          avr_snes_mode;
-reg [8:0]    avr_ctrl;
+reg [7:0]    avr_ctrl;
 // inital values
 initial begin
     clk <=  1'b0;
     cycle <= 1'b0;
-    avr_reset <= 1'b0;
     avr_ctrl <= 8'b0;
 end
 
@@ -90,14 +83,7 @@ system dut (
     .snes_addr ( snes_addr ),
     .avr_data( avr_data ),
     .avr_ctrl( avr_ctrl ),
-
-    .avr_counter_n( avr_counter_n ),
-    .avr_we_n( avr_we_n ),
-    .avr_oe_n( avr_oe_n ),
-    .avr_si( avr_si ),
-    .avr_clk( clk ),
-    .avr_sreg_en_n( sreg_en_n ),
-    .avr_reset( avr_reset )
+    .avr_clk( clk )
 );
 
 // generate clock
@@ -113,11 +99,20 @@ initial begin
     $dumpfile("system_tb.vcd");
 	$dumpvars(0, dut);
     // reset dut
-    avr_reset = 1'b1;
+    $display("Reset hi"); 
+    #tck
+    avr_ctrl = AVR_RESET_HI;
+    //avr_reset = 1'b1;
+    #tck
     #tck
     // setup all function blocks
-    avr_snes_mode = 1'b0;
-    avr_reset = 1'b0;
+    $display("Reset lo"); 
+    avr_ctrl = AVR_SNES_MODE_LO;
+    #tck
+    avr_ctrl = AVR_RESET_LO;
+    #tck
+    #tck
+    //avr_reset = 1'b0;
     // init data register
     snes_addr_reg = 21'bz;
     avr_data_reg  = 8'bz;
@@ -125,67 +120,78 @@ initial begin
     sram_data_reg = 8'bz;
     sram_ce_n_reg = 8'bz;
     // disable sram
-    avr_oe_n = 1'b1;
-    avr_we_n = 1'b1;
+    avr_ctrl = AVR_OE_HI;
+    #tck
+    avr_ctrl = AVR_WE_HI;
+    #tck
+    //avr_oe_n = 1'b1;
+    //avr_we_n = 1'b1;
     // enable SREG
-    sreg_en_n = 1'b0;
-    avr_si = 1'b0;
+    avr_ctrl = AVR_SREG_EN_LO;
+    #tck
+    avr_ctrl = AVR_SI_LO;
+    #tck
     // disable counter
-    avr_counter_n = 1'b1;
+    avr_ctrl = AVR_COUNTER_HI;
+    #tck
     $display("Push address 0x4ccf into sreg"); 
-    avr_si = 1'b1;
+    avr_ctrl = AVR_SI_HI;
     #tck
     #tck
-    avr_si = 1'b0;
+    avr_ctrl = AVR_SI_LO;
     #tck
     #tck
-    avr_si = 1'b0;
+    avr_ctrl = AVR_SI_LO;
     #tck
     #tck
-    avr_si = 1'b1;
+    avr_ctrl = AVR_SI_HI;
     #tck
     #tck
-    avr_si = 1'b1;
+    avr_ctrl = AVR_SI_HI;
     #tck
     #tck
-    avr_si = 1'b0;
+    avr_ctrl = AVR_SI_LO;
     #tck
     #tck
-    avr_si = 1'b0;
+    avr_ctrl = AVR_SI_LO;
     #tck
     #tck
-    avr_si = 1'b1;
+    avr_ctrl = AVR_SI_HI;
     #tck
     #tck
-    avr_si = 1'b1;
+    avr_ctrl = AVR_SI_HI;
     #tck
     #tck
-    avr_si = 1'b0;
+    avr_ctrl = AVR_SI_LO;
     #tck
     #tck
-    avr_si = 1'b0;
+    avr_ctrl = AVR_SI_LO;
     #tck
     #tck
-    avr_si = 1'b1;
+    avr_ctrl = AVR_SI_HI;
     #tck
     #tck
-    avr_si = 1'b1;
+    avr_ctrl = AVR_SI_HI;
     #tck
     #tck
-    avr_si = 1'b1;
+    avr_ctrl = AVR_SI_HI;
     #tck
     #tck
-    avr_si = 1'b1;
+    avr_ctrl = AVR_SI_HI;
     #tck
     #tck
     #tck
     // disable SREG
-    sreg_en_n = 1'b1;
+    avr_ctrl = AVR_SREG_EN_HI;
+    #tck
     $display("#1 READ byte $aa from SRAM -> AVR");
     // simulate data on SRam side
     sram_data_reg = 8'haa;
     // enabler OE
-    avr_oe_n = 1'b0;
+    //avr_oe_n = 1'b0;
+    avr_ctrl = AVR_OE_LO;
+    #tck
+    #tck
     #tck
     #tck
     #tck
@@ -201,11 +207,16 @@ initial begin
     #tck 
     #tck 
     #tck 
+    #tck 
+    #tck 
     
     $display("#3 WRITE byte $ee AVR -> SRAM");
     // enable WE
-    avr_oe_n = 1'b1;
-    avr_we_n = 1'b0;
+    //avr_oe_n = 1'b1;
+    avr_ctrl = AVR_OE_HI;
+    #tck
+    avr_ctrl = AVR_WE_LO;
+    //avr_we_n = 1'b0;
     // wait for IDLE state in FSM
     #tck
     #tck
@@ -217,12 +228,14 @@ initial begin
     #tck
     #tck
     #tck
-    #tck
-    
+    #tck 
     $display("#4 READ byte $22 from SRAM -> AVR");
     // enable OE
-    avr_oe_n = 1'b0;
-    avr_we_n = 1'b1;
+    avr_ctrl = AVR_WE_HI;
+    #tck
+    avr_ctrl = AVR_OE_LO;
+    //avr_oe_n = 1'b0;
+    //avr_we_n = 1'b1;
     // wait for IDLE state in FSM
     #tck
     #tck
@@ -234,31 +247,15 @@ initial begin
     #tck
     #tck
     #tck
-	
+	#tck 
+
     $display("#5 INC Counter");
     // toggle counter to incremtn SRAM address
-    avr_counter_n = 1'b0;
+    avr_ctrl = AVR_COUNTER_LO;
     #tck
     #tck
-    avr_counter_n = 1'b1;
+    avr_ctrl = AVR_COUNTER_HI;
     #tck
-    #tck
-    
-    // test command muxer
-    $display("#5 Test comand muer");
-    avr_ctrl = AVR_RESET_HI; 
-    #tck
-    avr_ctrl = AVR_RESET_LO;
-    #tck
-    avr_ctrl = AVR_SREG_EN_LO;
-    #tck
-    avr_ctrl = AVR_SI_HI;
-    #tck
-    avr_ctrl = AVR_SI_LO;
-    #tck
-    avr_ctrl = AVR_SI_HI;
-    #tck
-    avr_ctrl = AVR_SI_HI;
     #tck
     $finish;
 end

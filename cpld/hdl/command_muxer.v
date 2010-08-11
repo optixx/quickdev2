@@ -65,7 +65,7 @@ begin
     reg_avr_reset     <= 0;
 end
 
-always @(posedge avr_clk or negedge avr_clk)
+always @(posedge avr_clk or negedge avr_clk or avr_ctrl)
 begin : COMMAND_MUXER
     case(avr_ctrl)
         AVR_RESET_LO: begin
