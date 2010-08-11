@@ -69,13 +69,13 @@ reg          avr_oe_n;
 reg          avr_si;
 reg          avr_reset;
 reg          avr_snes_mode;
-reg [6:0]    avr_ctrl;
+reg [8:0]    avr_ctrl;
 // inital values
 initial begin
     clk <=  1'b0;
     cycle <= 1'b0;
     avr_reset <= 1'b0;
-    avr_ctrl <= 7'b0;
+    avr_ctrl <= 8'b0;
 end
 
 // the device under testing
