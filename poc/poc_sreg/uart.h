@@ -6,7 +6,7 @@
 #define uart_print(s) uart_print_P(PSTR(s))
 void uart_init(uint32_t baud);
 void uart_putchar(uint8_t c);
-void uart_putstring(uint8_t *str);
+void uart_putstring(char *str);
 uint8_t uart_getchar(void);
 uint8_t uart_available(void);
 void uart_print_P(const uint8_t *str);

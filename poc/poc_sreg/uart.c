@@ -71,7 +71,7 @@ void uart_putchar(uint8_t c)
 	//sei();
 }
 
-void uart_putstring(uint8_t *str)
+void uart_putstring(char *str)
 {
 	while (*str) {
 	    uart_putchar(*str);
