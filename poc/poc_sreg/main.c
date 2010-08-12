@@ -5,11 +5,12 @@
 
 #define nop()               __asm volatile ("nop")
 #define wait()              _delay_us(1)
-#define halt()              uart_putstring("halt"); while(1)
+#define halt()              do { uart_putstring("halt"); while(1); } while (0)
+
+
 
 #define BAUD_RATE 115200
 
-// Ports
 #define AVR_DATA        PORTA
 #define AVR_DATA_DIR    DDRA
 #define AVR_DATA_PIN    PINA
@@ -28,7 +29,7 @@
 #define AVR_CTRL        PORTB 
 #define AVR_CTRL_DIR    DDRB
 
-
+// CRTL Command values
 #define IDLE              0x01  
 #define AVR_RESET_LO      0x02  
 #define AVR_RESET_HI      0x03  
@@ -45,22 +46,22 @@
 #define AVR_SNES_MODE_LO  0x0e  
 #define AVR_SNES_MODE_HI  0x0f  
 
-
-#define SET_IDLE()                AVR_CTRL = IDLE; nop()
-#define SET_AVR_RESET_LO()        AVR_CTRL = AVR_SREG_EN_LO; nop()
-#define SET_AVR_RESET_HI()        AVR_CTRL = AVR_RESET_HI; nop()
-#define SET_AVR_SREG_EN_LO()      AVR_CTRL = AVR_SREG_EN_LO; nop()
-#define SET_AVR_SREG_EN_HI()      AVR_CTRL = AVR_SREG_EN_HI; nop()
-#define SET_AVR_SI_LO()           AVR_CTRL = AVR_SI_LO; nop()
-#define SET_AVR_SI_HI()           AVR_CTRL = AVR_SI_HI; nop()
-#define SET_AVR_OE_LO()           AVR_CTRL = AVR_OE_LO; nop()
-#define SET_AVR_OE_HI()           AVR_CTRL = AVR_OE_HI; nop()
-#define SET_AVR_WE_LO()           AVR_CTRL = AVR_WE_LO; nop()
-#define SET_AVR_WE_HI()           AVR_CTRL = AVR_OE_HI; nop()
-#define SET_AVR_COUNTER_LO()      AVR_CTRL = AVR_COUNTER_LO; nop()
-#define SET_AVR_COUNTER_HI()      AVR_CTRL = AVR_COUNTER_HI; nop()
-#define SET_AVR_SNES_MODE_LO()    AVR_CTRL = AVR_SNES_MODE_LO; nop()
-#define SET_AVR_SNES_MODE_HI()    AVR_CTRL = AVR_SNES_MODE_HI; nop()
+// CTRL Command Macros
+#define SET_IDLE()                do { AVR_CTRL = IDLE; nop(); } while (0)
+#define SET_AVR_RESET_LO()        do { AVR_CTRL = AVR_SREG_EN_LO; nop(); } while (0)
+#define SET_AVR_RESET_HI()        do { AVR_CTRL = AVR_RESET_HI; nop(); } while (0)
+#define SET_AVR_SREG_EN_LO()      do { AVR_CTRL = AVR_SREG_EN_LO; nop(); } while (0)
+#define SET_AVR_SREG_EN_HI()      do { AVR_CTRL = AVR_SREG_EN_HI; nop(); } while (0)
+#define SET_AVR_SI_LO()           do { AVR_CTRL = AVR_SI_LO; nop(); } while (0)
+#define SET_AVR_SI_HI()           do { AVR_CTRL = AVR_SI_HI; nop(); } while (0)
+#define SET_AVR_OE_LO()           do { AVR_CTRL = AVR_OE_LO; nop(); } while (0)
+#define SET_AVR_OE_HI()           do { AVR_CTRL = AVR_OE_HI; nop(); } while (0)
+#define SET_AVR_WE_LO()           do { AVR_CTRL = AVR_WE_LO; nop(); } while (0)
+#define SET_AVR_WE_HI()           do { AVR_CTRL = AVR_OE_HI; nop(); } while (0)
+#define SET_AVR_COUNTER_LO()      do { AVR_CTRL = AVR_COUNTER_LO; nop(); } while (0)
+#define SET_AVR_COUNTER_HI()      do { AVR_CTRL = AVR_COUNTER_HI; nop(); } while (0)
+#define SET_AVR_SNES_MODE_LO()    do { AVR_CTRL = AVR_SNES_MODE_LO; nop(); } while (0)
+#define SET_AVR_SNES_MODE_HI()    do { AVR_CTRL = AVR_SNES_MODE_HI; nop(); } while (0)
 
 
 void sreg_set(uint32_t addr);
