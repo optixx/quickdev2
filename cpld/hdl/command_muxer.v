@@ -21,11 +21,13 @@ parameter AVR_SI_HI         =  8'b00000111;
 parameter AVR_OE_LO         =  8'b00001000;
 parameter AVR_OE_HI         =  8'b00001001;
 parameter AVR_WE_LO         =  8'b00001010;
-parameter AVR_WE_HI         =  8'b00001100;
-parameter AVR_COUNTER_LO    =  8'b00001101;
-parameter AVR_COUNTER_HI    =  8'b00001110;
-parameter AVR_SNES_MODE_LO  =  8'b00001111;
-parameter AVR_SNES_MODE_HI  =  8'b00010000;
+parameter AVR_WE_HI         =  8'b00001011;
+parameter AVR_COUNTER_LO    =  8'b00001100;
+parameter AVR_COUNTER_HI    =  8'b00001101;
+parameter AVR_SNES_MODE_LO  =  8'b00001110;
+parameter AVR_SNES_MODE_HI  =  8'b00001111;
+
+
 
 reg reg_avr_snes_mode;
 reg reg_avr_counter_n;

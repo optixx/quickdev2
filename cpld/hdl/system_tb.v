@@ -7,21 +7,22 @@ parameter clk_freq = 1000000000 / tck;      // Frequenzy in HZ
 parameter sck      = 10;                    // sreg clock period in ns
 
 
-parameter IDLE              =  7'b0000001;
-parameter AVR_RESET_LO      =  7'b0000010;
-parameter AVR_RESET_HI      =  7'b0000011;
-parameter AVR_SREG_EN_LO    =  7'b0000100;
-parameter AVR_SREG_EN_HI    =  7'b0000101;
-parameter AVR_SI_LO         =  7'b0000110;
-parameter AVR_SI_HI         =  7'b0000111;
-parameter AVR_OE_LO         =  7'b0001000;
-parameter AVR_OE_HI         =  7'b0001001;
-parameter AVR_WE_LO         =  7'b0001010;
-parameter AVR_WE_HI         =  7'b0001100;
-parameter AVR_COUNTER_LO    =  7'b0001101;
-parameter AVR_COUNTER_HI    =  7'b0001110;
-parameter AVR_SNES_MODE_LO  =  7'b0001111;
-parameter AVR_SNES_MODE_HI  =  7'b0010000;
+
+parameter IDLE              =  8'b00000001;
+parameter AVR_RESET_LO      =  8'b00000010;
+parameter AVR_RESET_HI      =  8'b00000011;
+parameter AVR_SREG_EN_LO    =  8'b00000100;
+parameter AVR_SREG_EN_HI    =  8'b00000101;
+parameter AVR_SI_LO         =  8'b00000110;
+parameter AVR_SI_HI         =  8'b00000111;
+parameter AVR_OE_LO         =  8'b00001000;
+parameter AVR_OE_HI         =  8'b00001001;
+parameter AVR_WE_LO         =  8'b00001010;
+parameter AVR_WE_HI         =  8'b00001011;
+parameter AVR_COUNTER_LO    =  8'b00001100;
+parameter AVR_COUNTER_HI    =  8'b00001101;
+parameter AVR_SNES_MODE_LO  =  8'b00001110;
+parameter AVR_SNES_MODE_HI  =  8'b00001111;
 
 
 reg          clk;

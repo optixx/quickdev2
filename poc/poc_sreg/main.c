@@ -36,6 +36,23 @@
 #define BAUD_RATE 115200
 
 
+#define IDLE              0x01  // 8'b00000001;
+#define AVR_RESET_LO      0x02  8'b00000010;
+#define AVR_RESET_HI      0x03  8'b00000011;
+#define AVR_SREG_EN_LO    0x04  8'b00000100;
+#define AVR_SREG_EN_HI    0x05  8'b00000101;
+#define AVR_SI_LO         0x06  8'b00000110;
+#define AVR_SI_HI         0x07  8'b00000111;
+#define AVR_OE_LO         0x08  8'b00001000;
+#define AVR_OE_HI         0x09  8'b00001001;
+#define AVR_WE_LO         0x0a  8'b00001010;
+#define AVR_WE_HI         0x0b =  8'b00001100;
+#define AVR_COUNTER_LO    0x0c  8'b00001101;
+#define AVR_COUNTER_HI    0x0d  8'b00001110;
+#define AVR_SNES_MODE_LO  0x0e  8'b00001111;
+#define AVR_SNES_MODE_HI  0x0f 8'b00010000;
+
+
 void sreg_set(uint32_t addr);
 
 #if 0
