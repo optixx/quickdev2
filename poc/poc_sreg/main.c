@@ -294,7 +294,6 @@ void toggle_sreg_pattern(void){
     
     // write test patterns to SREG
     // for LA debugging via the debug lines
-    
     while(1){
 	    uart_putstring("sreg: 0x5555\n\r");
         sreg_set(0x5555);
@@ -340,6 +339,7 @@ int main(void)
 	uint8_t i,byte,buf[2];
     uart_init(BAUD_RATE);
     init();
+    toggle_sreg_pattern();
     write_burst_big_block();
     halt();
     return 0;

@@ -36,7 +36,7 @@ wire fsm_clk;
 
 // dummy debug reg to which be used for 
 // currently not debug modules 
-wire [7:0]  debug_dummy;
+wire [7:0]  debug_disabled;
 
 assign sram_oe_n = avr_oe_n;
 assign sram_we_n = avr_we_n;
@@ -67,7 +67,7 @@ sreg sreg0 (
 	.out( sram_addr ),
     .en_n( avr_sreg_en_n ),
     .counter_n ( avr_counter_n),
-    .debug( debug_dummy )
+    .debug( debug )
 );
 
 // bus 
@@ -78,7 +78,7 @@ bus_fsm bus_fsm0(
     .oe_n( avr_oe_n ),
     .avr( avr_data ),
     .sram( sram_data ),
-    .debug( debug)
+    .debug( debug_disabled)
 );
 
 endmodule
