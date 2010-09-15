@@ -71,11 +71,11 @@ NET "avr_data<0>"    LOC = P113  | IOSTANDARD = LVTTL | SLEW = FAST;
 
 # AVR PortB, CPLD<->AVR control lines
 NET "avr_ctrl<0>"    LOC = P82  | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "avr_counter"    LOC = P83  | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "avr_we"         LOC = P85  | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "avr_oe"         LOC = P86  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "avr_counter_n"  LOC = P83  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "avr_we_n"       LOC = P85  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "avr_oe_n"       LOC = P86  | IOSTANDARD = LVTTL | SLEW = FAST;
 NET "avr_si"         LOC = P87  | IOSTANDARD = LVTTL | SLEW = FAST;
-NET "avr_sreg_en"    LOC = P88  | IOSTANDARD = LVTTL | SLEW = FAST;
+NET "avr_sreg_en_n"  LOC = P88  | IOSTANDARD = LVTTL | SLEW = FAST;
 NET "avr_reset"      LOC = P91  | IOSTANDARD = LVTTL | SLEW = FAST;
 NET "avr_clk"        LOC = P30  | IOSTANDARD = LVTTL | SLEW = FAST;
-#NET "avr_clk"        LOC = P92  | IOSTANDARD = LVTTL | SLEW = FAST;
+#NET "avr_clk"       LOC = P92  | IOSTANDARD = LVTTL | SLEW = FAST;

@@ -38,8 +38,8 @@ wire fsm_clk;
 // currently not debug modules 
 wire [7:0]  debug_dummy;
 
-assign sram_oe_n = avr_oe;
-assign sram_we_n = avr_we;
+assign sram_oe_n = avr_oe_n;
+assign sram_we_n = avr_we_n;
 assign sram_ce_n = (avr_oe_n && avr_we_n) ? 1'b1 : 1'b0 ;
 
 // divide external clock by 2 for the sreg clk 
