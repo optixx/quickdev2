@@ -43,7 +43,7 @@ assign sram_oe_n = avr_oe_n;
 assign sram_we_n = avr_we_n;
 assign sram_ce_n = (avr_oe_n && avr_we_n) ? 1'b1 : 1'b0 ;
 
-assign debug = { avr_clk,avr_sreg_en_n,avr_si,sram_addr[4:0]};
+//assign debug = { avr_clk,avr_sreg_en_n,avr_si,sram_addr[4:0]};
 
 // command muxer
 
@@ -84,7 +84,7 @@ sreg sreg0 (
 	.out( sram_addr ),
     .en_n( avr_sreg_en_n ),
     .counter_n ( avr_counter_n),
-    .debug( debug_disabled01  )
+    .debug( debug  )
 );
 
 // bus 

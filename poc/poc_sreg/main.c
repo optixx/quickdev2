@@ -375,7 +375,8 @@ int main(void)
 {
     uart_init(BAUD_RATE);
     init();
-    toggle_sreg_pattern();        
+    write_loop();
+    write_big_block();
     halt();
     return 0;
 }
