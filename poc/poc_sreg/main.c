@@ -48,7 +48,7 @@
 
 // CTRL Command Macros
 #define SET_IDLE()                do { AVR_CTRL = IDLE; nop(); } while (0)
-#define SET_AVR_RESET_LO()        do { AVR_CTRL = AVR_SREG_EN_LO; nop(); } while (0)
+#define SET_AVR_RESET_LO()        do { AVR_CTRL = AVR_RESET_LO; nop(); } while (0)
 #define SET_AVR_RESET_HI()        do { AVR_CTRL = AVR_RESET_HI; nop(); } while (0)
 #define SET_AVR_SREG_EN_LO()      do { AVR_CTRL = AVR_SREG_EN_LO; nop(); } while (0)
 #define SET_AVR_SREG_EN_HI()      do { AVR_CTRL = AVR_SREG_EN_HI; nop(); } while (0)
@@ -57,7 +57,7 @@
 #define SET_AVR_OE_LO()           do { AVR_CTRL = AVR_OE_LO; nop(); } while (0)
 #define SET_AVR_OE_HI()           do { AVR_CTRL = AVR_OE_HI; nop(); } while (0)
 #define SET_AVR_WE_LO()           do { AVR_CTRL = AVR_WE_LO; nop(); } while (0)
-#define SET_AVR_WE_HI()           do { AVR_CTRL = AVR_OE_HI; nop(); } while (0)
+#define SET_AVR_WE_HI()           do { AVR_CTRL = AVR_WE_HI; nop(); } while (0)
 #define SET_AVR_COUNTER_LO()      do { AVR_CTRL = AVR_COUNTER_LO; nop(); } while (0)
 #define SET_AVR_COUNTER_HI()      do { AVR_CTRL = AVR_COUNTER_HI; nop(); } while (0)
 #define SET_AVR_SNES_MODE_LO()    do { AVR_CTRL = AVR_SNES_MODE_LO; nop(); } while (0)
@@ -301,7 +301,7 @@ void sreg_set(uint32_t addr)
     #if SREG_DEBUG 
     uart_putstring("sreg_set\n\r");
     #endif
-    SET_AVR_WE_HI();
+    SET_AVR_SREG_EN_HI();
     //AVR   |=  (1 << AVR_SREG_EN);
     while(i--) {
         if ((addr & ( 1L << i))){
@@ -317,9 +317,8 @@ void sreg_set(uint32_t addr)
             uart_putchar('0');
     #endif
         }
-        SET_AVR_WE_LO();
-        SET_AVR_WE_HI();
-
+        SET_AVR_SREG_EN_LO();
+        SET_AVR_SREG_EN_HI();
         //AVR   &=  ~(1 << AVR_SREG_EN);
 	    //AVR   |=  (1 << AVR_SREG_EN);
     }

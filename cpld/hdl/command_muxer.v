@@ -48,26 +48,17 @@ assign avr_reset = reg_avr_reset;
 
 initial 
 begin
-    /*
-    reg_avr_snes_mode <= 0;
-    reg_avr_counter_n <= 1;
-    reg_avr_we_n      <= 1;
-    reg_avr_oe_n      <= 1;
-    reg_avr_si        <= 0;
-    reg_avr_sreg_en_n <= 1;
-    reg_avr_reset     <= 0;
-    */
-
-    reg_avr_snes_mode <= 0;
-    reg_avr_counter_n <= 0;
-    reg_avr_we_n      <= 0;
-    reg_avr_oe_n      <= 0;
-    reg_avr_si        <= 0;
-    reg_avr_sreg_en_n <= 0;
-    reg_avr_reset     <= 0;
+    reg_avr_snes_mode = 1;
+    reg_avr_counter_n = 1;
+    reg_avr_we_n      = 1;
+    reg_avr_oe_n      = 1;
+    reg_avr_si        = 1;
+    reg_avr_sreg_en_n = 1;
+    reg_avr_reset     = 0;
 end
 
-always @(posedge avr_clk or negedge avr_clk or avr_ctrl)
+
+always @(posedge avr_clk)
 begin : COMMAND_MUXER
     case(avr_ctrl)
         AVR_RESET_LO: begin

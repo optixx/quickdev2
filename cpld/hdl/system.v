@@ -35,18 +35,18 @@ wire fsm_clk;
 
 // dummy debug reg to which be used for 
 // currently not debug modules 
-wire [7:0]  debug_dummy;
+wire [7:0]  debug_disabled01;
+wire [7:0]  debug_disabled02;
 
 // forward ctrl to sram
-assign sram_oe_n = avr_oe;
-assign sram_we_n = avr_we;
+assign sram_oe_n = avr_oe_n;
+assign sram_we_n = avr_we_n;
 assign sram_ce_n = (avr_oe_n && avr_we_n) ? 1'b1 : 1'b0 ;
 
+assign debug = { avr_clk,avr_sreg_en_n,avr_si,sram_addr[4:0]};
 
 // command muxer
-reg [6:0] dw;
-wire [6:0] d;
-assign d = dw;
+
 command_muxer cmd0 (
     .avr_ctrl ( avr_ctrl ),
     .avr_clk ( avr_clk ),
@@ -84,7 +84,7 @@ sreg sreg0 (
 	.out( sram_addr ),
     .en_n( avr_sreg_en_n ),
     .counter_n ( avr_counter_n),
-    .debug( debug_dummy )
+    .debug( debug_disabled01  )
 );
 
 // bus 
@@ -95,7 +95,7 @@ bus_fsm bus_fsm0(
     .oe_n( avr_oe_n ),
     .avr( avr_data ),
     .sram( sram_data ),
-    .debug( debug)
+    .debug( debug_disabled02 )
 );
 
 endmodule
