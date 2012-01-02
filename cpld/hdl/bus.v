@@ -1,5 +1,5 @@
 module bus_fsm #(
-    parameter DWIDTH= 8
+    parameter DWIDTH = 8
 )(
     input                   clk,
     input                   reset,
