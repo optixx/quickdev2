@@ -1,46 +1,47 @@
 QUICKDEV2 NOTES
+===============
 
-20100808
+### 20100808
 
-AVR ISP
-o quickdev standart cable that has isp asn serial 
-o connect avr dragon isp to isp header at combo cable
-o avr dragon isp
-    o vcc has to be connected
-    o red: vcc
-    o black: gnd
-    o sck: yellow
-    o mosi: green
-    o rst: black
-o runs under os x
+## AVR ISP
+* quickdev standart cable that has isp as serial 
+* connect avr dragon isp to isp header at combo cable
+* avr dragon isp
+    * vcc has to be connected
+    * vcc:  red
+    * gnd:  black
+    * sck:  yellow
+    * mosi: green
+    * rst:  black
+* works on os x
 
-AVR JTAG:
-o connects to the xilinx jtag cable
-o AVR ISP has to be disconnected
-o jtag header
-    o vcc: red
-    o gnd: black
-    o tdi: yellow
-    o tdo: green
-    o tms: white
-    o sck: red
-o last test on linux and osx wir avarice (2.09,2.10) didn't work, starting up a 
+## AVR JTAG
+* connects to the xilinx jtag cable
+* AVR ISP has to be disconnected
+* jtag header
+    * vcc: red
+    * gnd: black
+    * tdi: yellow
+    * tdo: green
+    * tms: white
+    * sck: red
+* last test on linux and osx with avarice (2.09,2.10) didn't work, starting up a 
   gdb yields and 'cant access memory' error
   
 
-CPLD JTAG:
-o runs under linx in vmware
-o preload usbdriver
-o export LD_PRELOAD=/home/david/Devel/arch/fpga/tools/usb-driver
-o check usb vendor id, has to be 03fd:0008
-o otherwise fxload the firmware by hand
-o start impact, it should find the cable automatically, if not reboot
-o the cpld gets dedecteted by it self, if not run boundairy scan
-o run 'program' from context menu
+## CPLD JTAG
+* runs under linx in vmware
+* preload usbdriver
+* export LD_PRELOAD=/home/david/Devel/arch/fpga/tools/usb-driver
+* check usb vendor id, has to be 03fd:0008
+* otherwise fxload the firmware by hand
+* start impact, it should find the cable automatically, if not reboot
+* the cpld gets dedecteted by it self, if not run boundairy scan
+* run 'program' from context menu
 
-QUICKDEV DEBUG HEADER
-o then head pins located at the reset button
-o connect to saleae LA:
+## QUICKDEV DEBUG HEADER
+* then head pins located at the reset button
+* connect to saleae LA:
     gnd:    grey
     debug0: black
     debug1: brown
@@ -49,24 +50,24 @@ o connect to saleae LA:
     debug4: yellow
     debug5: green
     debug6: blue
-    debug7: lila
+    debug7: violet
     
 
-POC MASSSTORAGE
-o makefile include 'programm' for avrdude with dragon_isp
-o uart uses the quickdev combo cabel and runs at 115200
-o compile works under os x
-o seriall screen works under os x
-o os x see masstorage device
+## POC MASSSTORAGE
+* makefile include 'programm' for avrdude with dragon_isp
+* uart uses the quickdev combo cabel and runs at 115200
+* compile works on os x
+* serial screen works on os x
+* masstorage device should pop in finder
 
 
-POC SREG
-o makefile include 'programm' for avrdude with dragon_isp
-o uart uses the quickdev combo cabel and runs at 115200
-o compile works under os x
-o seriall screen works under os x
-o to debug the sreg or the fsm reduce the speed of the avr
-    o program fuse divide clock by 8 internally
-    o set uart baud speed to 9600 by setting UBRR1=25
-    o change speed in screen session
+## POC SREG
+* makefile include 'programm' for avrdude with dragon_isp
+* uart uses the quickdev combo cabel and runs at 115200
+* compile works on os x
+* serial screen works on os x
+* to debug the sreg or the fsm reduce the speed of the avr
+    * program fuse divide clock by 8 internally
+    * set uart baud speed to 9600 by setting UBRR1=25
+    * change speed in screen session
 
