@@ -42,15 +42,15 @@ QUICKDEV2 NOTES
 ## QUICKDEV DEBUG HEADER
 * then head pins located at the reset button
 * connect to saleae LA:
-    gnd:    grey
-    debug0: black
-    debug1: brown
-    debug2: red
-    debug3: orange
-    debug4: yellow
-    debug5: green
-    debug6: blue
-    debug7: violet
+    * gnd:    grey
+    * debug0: black
+    * debug1: brown
+    * debug2: red
+    * debug3: orange
+    * debug4: yellow
+    * debug5: green
+    * debug6: blue
+    * debug7: violet
     
 
 ## POC MASSSTORAGE
